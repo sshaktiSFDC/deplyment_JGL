@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Integration_Team_Share</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>records owned by any integration team member is shared with every other integration team member</description>
+        <label>Integration Team Share</label>
+        <sharedTo>
+            <group>Integration_Team</group>
+        </sharedTo>
+        <sharedFrom>
+            <group>Integration_Team</group>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>
