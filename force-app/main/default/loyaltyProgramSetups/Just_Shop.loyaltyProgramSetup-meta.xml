@@ -101,11 +101,20 @@
             <parameterName>GeneratedOrderCode</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherDefinitionName</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Voucher_Definition_Name__c}</value>
+        </parameters>
         <processName>Manual Points Adjustments</processName>
         <processType>TransactionJournal</processType>
         <rules>
             <actions>
-                <actionName>Retrieve Points for Adjustment</actionName>
+                <actionName>Retrieve Points for Adjustment from Ledgers</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>MemberId</parameterName>
@@ -145,7 +154,37 @@
                 <flowDefinition>Loyalty_Process_Get_Runtime_Configuration</flowDefinition>
             </actions>
             <actions>
-                <actionName>GET Positive Balance Currency [After Adjustment]</actionName>
+                <actionName>Credit Adjustment Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToCredit</parameterName>
+                    <value>CEILING({!TransactionJournal.TransactionAmount} )</value>
+                </actionParameters>
+                <actionType>CreditPoints</actionType>
+            </actions>
+            <actions>
+                <actionName>Debit Adjustment Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToDebit</parameterName>
+                    <value>ABS(CEILING({!TransactionJournal.TransactionAmount} ))</value>
+                </actionParameters>
+                <actionType>DebitPoints</actionType>
+            </actions>
+            <actions>
+                <actionName>GET Positive Balance Currency [After Adjustment ]</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>ProgramCurrencyName</parameterName>
@@ -289,134 +328,80 @@
                     <parameterName>TransactionAmount</parameterName>
                     <value>{!PointsToDebitForVoucherIssue}</value>
                 </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Channel_Name__c</parameterName>
+                    <value>{!TransactionJournal.Channel}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Channel</parameterName>
+                    <value>{!TransactionJournal.Channel}</value>
+                </actionParameters>
                 <actionType>RunProgramProcess</actionType>
                 <loyaltyProgramProcess>Rewards Redemption Process</loyaltyProgramProcess>
             </actions>
-            <actions>
-                <actionName>Overwrite Rewards Tracking EA to ZERO</actionName>
-                <actionParameters>
+            <conditions>
+                <conditionCriteria>(1 OR 2 ) AND 3 AND 4</conditionCriteria>
+                <conditionFilterCriteria>
                     <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>NULL</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
                     <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
+                    <sequence>2</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
                     <value>0</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Overwrite Rewards Tracking by Positive Currency Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
                     <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
                     <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
+                    <sequence>3</sequence>
+                    <sourceFieldName>TransactionJournal.Order_Item_ID__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
                     <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PositiveBalanceCurrency}</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Increment Rewards Tracking by Points Adjusted</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>IncreaseCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PointsAdjusted}</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Decrease Rewards Tracking by Points Adjusted</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>DecreaseCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PointsAdjusted}</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Overwrite Rewards Tracking to ZERO</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
+                    <sequence>4</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionName>IF Transaction Amount NOT NULL</conditionName>
+                <conditionType>ConditionGroup</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>GreaterThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
                     <value>0</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>debug Positive Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message4</parameterName>
-                    <value>&apos;EventType = &apos; &amp; {!EventType}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message3</parameterName>
-                    <value>&apos;PositiveBalanceCurrency =&apos; &amp; TEXT({!PositiveBalanceCurrency} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message2</parameterName>
-                    <value>&apos;Points Adjusted =&apos; &amp; TEXT( {!PointsAdjusted} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message1</parameterName>
-                    <value>&quot;&apos;Debug Positive Balance&apos;&quot;</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
-            </actions>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>And Amount &gt; 0</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>LessThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>And Amount &lt; 0</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
             <conditions>
                 <conditionCriteria>1</conditionCriteria>
                 <conditionFilterCriteria>
@@ -429,124 +414,36 @@
                 <conditionName>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</conditionName>
                 <conditionType>Condition</conditionType>
             </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>LessThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Currency Balance is NEGATIVE</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1 AND 2 AND 3</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>2</sequence>
-                    <sourceFieldName>EventType</sourceFieldName>
-                    <value>Credit</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>3</sequence>
-                    <sourceFieldName>PointsAdjusted</sourceFieldName>
-                    <value>PositiveBalanceCurrency</value>
-                    <valueType>Parameter</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &gt; Currency Balance</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1 AND 2</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>LessThan</operator>
-                    <sequence>2</sequence>
-                    <sourceFieldName>PointsAdjusted</sourceFieldName>
-                    <value>PositiveBalanceCurrency</value>
-                    <valueType>Parameter</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &lt; Currency Balance</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1 AND 2</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>2</sequence>
-                    <sourceFieldName>EventType</sourceFieldName>
-                    <value>Debit</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Currency Balance is POSITIVE and Adjustment is DEBIT</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Balance Currency = ZERO</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
             <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <previousRule>Bulk Voucher Upload</previousRule>
             <ruleName>Set Up Step</ruleName>
             <startDate>2024-03-01</startDate>
             <status>Active</status>
             <stepMappings>
-                <associatedStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</associatedStep>
-                <sequence>4</sequence>
+                <associatedStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</associatedStep>
+                <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>IF Positive Currency Balance is NEGATIVE</associatedStep>
+                <associatedStep>IF Transaction Amount NOT NULL</associatedStep>
+                <sequence>3</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>And Amount &gt; 0</associatedStep>
+                <parentStep>IF Transaction Amount NOT NULL</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>And Amount &lt; 0</associatedStep>
+                <parentStep>IF Transaction Amount NOT NULL</parentStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</associatedStep>
                 <sequence>5</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &gt; Currency Balance</associatedStep>
-                <sequence>6</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &lt; Currency Balance</associatedStep>
-                <sequence>7</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>IF Positive Currency Balance is POSITIVE and Adjustment is DEBIT</associatedStep>
-                <sequence>8</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>IF Positive Balance Currency = ZERO</associatedStep>
-                <sequence>9</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Retrieve Points for Adjustment</associatedStep>
+                <associatedStep>Retrieve Points for Adjustment from Ledgers</associatedStep>
+                <parentStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</parentStep>
                 <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
@@ -554,8 +451,18 @@
                 <sequence>2</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>GET Positive Balance Currency [After Adjustment]</associatedStep>
-                <sequence>3</sequence>
+                <associatedStep>Credit Adjustment Points</associatedStep>
+                <parentStep>And Amount &gt; 0</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Debit Adjustment Points</associatedStep>
+                <parentStep>And Amount &lt; 0</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>GET Positive Balance Currency [After Adjustment ]</associatedStep>
+                <sequence>4</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Assign Values for Vouchers Issuance</associatedStep>
@@ -581,35 +488,6 @@
                 <associatedStep>Run Debit Points and Journals for Voucher Issuance</associatedStep>
                 <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
                 <sequence>5</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Overwrite Rewards Tracking EA to ZERO</associatedStep>
-                <parentStep>IF Positive Currency Balance is NEGATIVE</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Overwrite Rewards Tracking by Positive Currency Balance</associatedStep>
-                <parentStep>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &gt; Currency Balance</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Increment Rewards Tracking by Points Adjusted</associatedStep>
-                <parentStep>IF Positive Currency Balance is POSITIVe and Adjustment is CREDIT ; and Adjustment &lt; Currency Balance</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Decrease Rewards Tracking by Points Adjusted</associatedStep>
-                <parentStep>IF Positive Currency Balance is POSITIVE and Adjustment is DEBIT</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Overwrite Rewards Tracking to ZERO</associatedStep>
-                <parentStep>IF Positive Balance Currency = ZERO</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>debug Positive Balance</associatedStep>
-                <sequence>10</sequence>
             </stepMappings>
         </rules>
         <rules>
@@ -665,6 +543,81 @@
             </stepMappings>
             <stepMappings>
                 <associatedStep>Update Status Points</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+        </rules>
+        <rules>
+            <actions>
+                <actionName>Issue Voucher by Definition Name</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherDefinitionName</parameterName>
+                    <value>{!VoucherDefinitionName}</value>
+                    <valueType>Parameter</valueType>
+                </actionParameters>
+                <actionType>IssueVoucher</actionType>
+            </actions>
+            <actions>
+                <actionName>Update Journal VoucherDefinition to TBD</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>TransactionJournal</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!TransactionJournal.Id}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Voucher_Definition_Name__c</parameterName>
+                    <value>&quot;TBD&quot;</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>TransactionJournal</entityApiName>
+            </actions>
+            <conditions>
+                <conditionCriteria>1 AND 2</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>2</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>NULL</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF VoucherDefinitonName is NOT BLANK</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <ruleName>Bulk Voucher Upload</ruleName>
+            <startDate>2024-03-01</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>IF VoucherDefinitonName is NOT BLANK</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Issue Voucher by Definition Name</associatedStep>
+                <parentStep>IF VoucherDefinitonName is NOT BLANK</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Journal VoucherDefinition to TBD</associatedStep>
+                <parentStep>IF VoucherDefinitonName is NOT BLANK</parentStep>
                 <sequence>2</sequence>
             </stepMappings>
         </rules>
@@ -2482,6 +2435,11 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionName>Publish Event to Reverse Redeemed Voucher Status to Issued</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
+                    <parameterName>OriginalChannel</parameterName>
+                    <value>{!TransactionJournal.Original_Channel__c}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
                     <parameterName>MemberId</parameterName>
                     <value>{!TransactionJournal.MemberId}</value>
                 </actionParameters>
@@ -2489,11 +2447,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <operator>Equals</operator>
                     <parameterName>OriginalOrderId</parameterName>
                     <value>{!TransactionJournal.Original_Order_ID__c}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>OriginalChannel</parameterName>
-                    <value>{!TransactionJournal.Original_Channel__c}</value>
                 </actionParameters>
                 <actionType>RunFlow</actionType>
                 <flowDefinition>Publish_Event_for_Reversal_of_Redeemed_Vouchers</flowDefinition>
@@ -4013,19 +3966,29 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
         <processType>TransactionJournal</processType>
         <rules>
             <actions>
-                <actionName>Flow to Get Total Rewards</actionName>
+                <actionName>GET Positive Balance Currency</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>MemberId</parameterName>
-                    <value>{!TransactionJournal.MemberId}</value>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>TotalRewardsAmount</parameterName>
-                    <value>BeginningTotalRewards</value>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>MC_PositiveCurrencyPointsBalance</value>
                 </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Management_Get_Total_Rewards_Amount</flowDefinition>
+                <actionType>GetMemberPointBalance</actionType>
+            </actions>
+            <actions>
+                <actionName>Assign Beginning Negative Balance</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>BeginningNegativeBalance</parameterName>
+                    <sequenceNumber>1</sequenceNumber>
+                    <value>ABS({!MC_PositiveCurrencyPointsBalance} )</value>
+                </actionParameters>
+                <actionType>AssignParameterValues</actionType>
             </actions>
             <actions>
                 <actionName>Set Parameter</actionName>
@@ -4046,12 +4009,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <parameterName>VoucherTargetPoints</parameterName>
                     <sequenceNumber>3</sequenceNumber>
                     <value>200</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>BeginningNegativeBalance</parameterName>
-                    <sequenceNumber>4</sequenceNumber>
-                    <value>0</value>
                 </actionParameters>
                 <actionType>AssignParameterValues</actionType>
             </actions>
@@ -4095,31 +4052,18 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionType>GetOutputsFromDecisionTable</actionType>
                 <decisionTable>Accrual_Purchase_Multiplier</decisionTable>
             </actions>
-            <actions>
-                <actionName>Get Positive Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>LessThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>MC_PositiveCurrencyPointsBalance</sourceFieldName>
+                    <value>0</value>
                     <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>MC_PositiveCurrencyPointsBalance</value>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Assign Negative Balance from Positive Currency in [BeginningNegativeBalance] param</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>BeginningNegativeBalance</parameterName>
-                    <sequenceNumber>1</sequenceNumber>
-                    <value>ABS({!MC_PositiveCurrencyPointsBalance} )</value>
-                </actionParameters>
-                <actionType>AssignParameterValues</actionType>
-            </actions>
+                </conditionFilterCriteria>
+                <conditionName>IF Positive Balance is NEGATIVE</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
             <conditions>
                 <conditionCriteria>1 OR 2</conditionCriteria>
                 <conditionFilterCriteria>
@@ -4139,37 +4083,30 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <conditionName>If Non Merchandise</conditionName>
                 <conditionType>Condition</conditionType>
             </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>LessThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>MC_PositiveCurrencyPointsBalance</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>If Positive Currency is NEGATIVE</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
             <isProcessEligibilityRule>false</isProcessEligibilityRule>
             <ruleName>Base Rule Setup</ruleName>
             <startDate>2024-03-01</startDate>
             <status>Active</status>
             <stepMappings>
+                <associatedStep>IF Positive Balance is NEGATIVE</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
                 <associatedStep>If Non Merchandise</associatedStep>
-                <sequence>3</sequence>
+                <sequence>4</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>If Positive Currency is NEGATIVE</associatedStep>
-                <sequence>7</sequence>
+                <associatedStep>GET Positive Balance Currency</associatedStep>
+                <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>Flow to Get Total Rewards</associatedStep>
+                <associatedStep>Assign Beginning Negative Balance</associatedStep>
+                <parentStep>IF Positive Balance is NEGATIVE</parentStep>
                 <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Set Parameter</associatedStep>
-                <sequence>2</sequence>
+                <sequence>3</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Set BasePoints to Zero</associatedStep>
@@ -4178,43 +4115,14 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             </stepMappings>
             <stepMappings>
                 <associatedStep>Run Flow - Get Runtime Configuration</associatedStep>
-                <sequence>4</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Get Decision Table Outcome</associatedStep>
                 <sequence>5</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>Get Positive Currency</associatedStep>
+                <associatedStep>Get Decision Table Outcome</associatedStep>
                 <sequence>6</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Assign Negative Balance from Positive Currency in [BeginningNegativeBalance] param</associatedStep>
-                <parentStep>If Positive Currency is NEGATIVE</parentStep>
-                <sequence>1</sequence>
             </stepMappings>
         </rules>
         <rules>
-            <actions>
-                <actionName>Increment PerOrder Rewards Tracking</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!DoublePointsPromo_DELTA_Multiplier} * {!PointsForPurchase}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>IncreaseCurrentValue</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
             <actions>
                 <actionName>Overwrite for PerLineItemOrder Rewards Tracking</actionName>
                 <actionParameters>
@@ -4340,32 +4248,12 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>Increment PerOrder Rewards Tracking</associatedStep>
+                <associatedStep>Overwrite for PerLineItemOrder Rewards Tracking</associatedStep>
                 <parentStep>IF product code qualifies</parentStep>
                 <sequence>1</sequence>
             </stepMappings>
-            <stepMappings>
-                <associatedStep>Overwrite for PerLineItemOrder Rewards Tracking</associatedStep>
-                <parentStep>IF product code qualifies</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
         </rules>
         <rules>
-            <actions>
-                <actionName>GET Positive Balance Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>MC_PositiveCurrencyPointsBalance</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
             <actions>
                 <actionName>Run Redeem Voucher Process</actionName>
                 <actionParameters>
@@ -4447,47 +4335,7 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionType>AssignParameterValues</actionType>
             </actions>
             <actions>
-                <actionName>PerOrder Rewards Tracking EA: Increment by LineItem</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PointsForPurchase} - {!EA_LineItemRedeemVoucherFaceValue}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>IncreaseCurrentValue</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>TotalOrderPurchasePoints assigned via GET consolidated PerOrder Rewards Tracking EA</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>TotalOrderPurchasePoints</value>
-                </actionParameters>
-                <actionType>GetMemberAttributesValues</actionType>
-            </actions>
-            <actions>
-                <actionName>Credit PositiveBalance Currency [add promo rewards; less voucher FV is vouchercode lineitem]</actionName>
+                <actionName>Credit PositiveBalance Currency ADD Promo EA_PerLineItemOrderRewardsTracking [if voucherCode lineitem; less voucher FV]</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>ProgramCurrencyName</parameterName>
@@ -4497,144 +4345,9 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>PointsToCredit</parameterName>
-                    <value>{!EA_PerLIneItemOrderRewardsTracking} + {!PointsForPurchase} - {!EA_LineItemRedeemVoucherFaceValue}</value>
+                    <value>{!EA_PerLIneItemOrderRewardsTracking} +  {!PointsForPurchase} - {!EA_LineItemRedeemVoucherFaceValue}</value>
                 </actionParameters>
                 <actionType>CreditPoints</actionType>
-            </actions>
-            <actions>
-                <actionName>Rewards Tracking EA: GET</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_RewardsTracking</value>
-                </actionParameters>
-                <actionType>GetMemberAttributesValues</actionType>
-            </actions>
-            <actions>
-                <actionName>BeginningRewardsTracking EA: Capture Value</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>BeginningBalanceRewardsTracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!EA_RewardsTracking}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_BeginningRewardsTracking</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>PerOrderRewardsTracking EA: Consolidate PerOrder Rewards with Beginning Value</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!TotalOrderPurchasePoints} + {!EA_BeginningRewardsTracking}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Debug BEginning Negative Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message3</parameterName>
-                    <value>&apos;EA_PerOrderRewardsTracking = &apos; &amp; TEXT( {!EA_PerOrderRewardsTracking} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message2</parameterName>
-                    <value>&apos;BeginningNegativeBalance = &apos; &amp; TEXT( {!BeginningNegativeBalance} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message1</parameterName>
-                    <value>&quot;&apos;Debug BEginning Negative Balance&apos;&quot;</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>A. Adjusted PerOrderRewardsTracking for Negative Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>0</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>B. Adjusted PerOrderRewardsTracking for Negative Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>PerOrder Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!TotalOrderPurchasePoints}  - {!BeginningNegativeBalance}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
             <actions>
                 <actionName>GET RedeemVoucher FaceValue Consolidated</actionName>
@@ -4652,19 +4365,19 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionType>GetMemberAttributesValues</actionType>
             </actions>
             <actions>
-                <actionName>Debug if Rewards will be Triggered</actionName>
+                <actionName>GET Positive Balance Currency after Credits</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Message2</parameterName>
-                    <value>&apos;EA_PerOrderRewardsTracking = &apos; &amp; TEXT({!EA_PerOrderRewardsTracking})</value>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Message1</parameterName>
-                    <value>&quot;&apos;Debug if Rewards will be Triggered&apos;&quot;</value>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>MC_PositiveCurrencyPointsBalance</value>
                 </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
+                <actionType>GetMemberPointBalance</actionType>
             </actions>
             <actions>
                 <actionName>A. Initialize LineItemCount</actionName>
@@ -4717,70 +4430,30 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
             <actions>
-                <actionName>Update Rewards Tracking for TargetMet flag and Reset</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeTargetValueAchieved</parameterName>
-                    <value>EA_IsRewardsTargetMet</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberAttributeCurrentValue</parameterName>
-                    <value>EA_RewardsTracking</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>FLOOR({!EA_PerOrderRewardsTracking}  / {!VoucherTargetPoints} )*{!VoucherTargetPoints}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
                 <actionName>Assign Values to IssueVoucher Params (whole order basis) &amp; Initialize DirectIssueVoucherCounter = 0</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>PointsToDebitForVoucherIssue</parameterName>
                     <sequenceNumber>1</sequenceNumber>
-                    <value>FLOOR({!EA_PerOrderRewardsTracking}  / {!VoucherTargetPoints} )*{!VoucherTargetPoints}</value>
+                    <value>FLOOR({!MC_PositiveCurrencyPointsBalance}   / {!VoucherTargetPoints} )*{!VoucherTargetPoints}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>LineItemTotalVoucherToIssue</parameterName>
                     <sequenceNumber>2</sequenceNumber>
-                    <value>FLOOR({!EA_PerOrderRewardsTracking}  / {!VoucherTargetPoints} )</value>
+                    <value>FLOOR({!MC_PositiveCurrencyPointsBalance}  / {!VoucherTargetPoints} )</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>LineItemTotalVoucherFaceValue</parameterName>
                     <sequenceNumber>3</sequenceNumber>
-                    <value>FLOOR({!EA_PerOrderRewardsTracking}  / {!VoucherTargetPoints} )*{!VoucherFaceValue}</value>
+                    <value>FLOOR({!MC_PositiveCurrencyPointsBalance}   / {!VoucherTargetPoints} )*{!VoucherFaceValue}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>DirectIssueVoucherCounter</parameterName>
                     <sequenceNumber>4</sequenceNumber>
                     <value>0</value>
-                </actionParameters>
-                <actionType>AssignParameterValues</actionType>
-            </actions>
-            <actions>
-                <actionName>Calculate CurrentTotalRewards</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>CurrentTotalRewards</parameterName>
-                    <sequenceNumber>1</sequenceNumber>
-                    <value>{!LineItemTotalVoucherFaceValue} + {!BeginningTotalRewards}  - {!EA_PerOrderRedeemVoucherFaceValue}</value>
                 </actionParameters>
                 <actionType>AssignParameterValues</actionType>
             </actions>
@@ -5073,8 +4746,8 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionName>Run Debit Points</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Order_ID__c</parameterName>
-                    <value>{!OrderID}</value>
+                    <parameterName>ActivityDate</parameterName>
+                    <value>{!TransactionJournal.ActivityDate}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
@@ -5083,28 +4756,13 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>ActivityDate</parameterName>
-                    <value>{!TransactionJournal.ActivityDate}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Channel</parameterName>
+                    <parameterName>Channel_Name__c</parameterName>
                     <value>{!TransactionJournal.Channel}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Brand</parameterName>
-                    <value>{!TransactionJournal.Brand}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Order_Item_ID__c</parameterName>
-                    <value>{!TransactionJournal.Order_Item_ID__c}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>JournalDate</parameterName>
-                    <value>{!TransactionJournal.JournalDate}</value>
+                    <parameterName>Order_ID__c</parameterName>
+                    <value>{!OrderID}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
@@ -5113,71 +4771,31 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
+                    <parameterName>Channel</parameterName>
+                    <value>{!TransactionJournal.Channel}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Order_Item_ID__c</parameterName>
+                    <value>{!TransactionJournal.Order_Item_ID__c}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
                     <parameterName>MemberId</parameterName>
                     <value>{!MemberID}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>JournalDate</parameterName>
+                    <value>{!TransactionJournal.JournalDate}</value>
                 </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>TransactionAmount</parameterName>
                     <value>{!PointsToDebitForVoucherIssue}</value>
                 </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Channel_Name__c</parameterName>
-                    <value>{!TransactionJournal.Channel}</value>
-                </actionParameters>
                 <actionType>RunProgramProcess</actionType>
                 <loyaltyProgramProcess>Rewards Redemption Process</loyaltyProgramProcess>
-            </actions>
-            <actions>
-                <actionName>GET Positive Currency Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>PointsBalance</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Debug Points Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message2</parameterName>
-                    <value>&apos;PointsBalance = &apos; &amp; TEXT({!PointsBalance} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message1</parameterName>
-                    <value>&quot;&apos;Debug Points Balance&apos;&quot;</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>SYNC Rewards Tracking EA with PositiveBalance Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PointsBalance}</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
             <actions>
                 <actionName>RESET PerOrder Rewards Tracking</actionName>
@@ -5220,47 +4838,12 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
             <actions>
-                <actionName>RESET Beginning Rewards Tracking</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>BeginningBalanceRewardsTracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>0</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>RESET RemainderRewardsBalance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>RemainderRewardsEABalance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>0</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
                 <actionName>RESET RedeemVoucherFaceValueTracking</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Value</parameterName>
+                    <value>0</value>
+                </actionParameters>
                 <actionParameters>
                     <operator>Equals</operator>
                     <parameterName>UpdateType</parameterName>
@@ -5271,11 +4854,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <parameterName>EngagementAttributeName</parameterName>
                     <value>Redeem Voucher FaceValueTracking</value>
                     <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>0</value>
                 </actionParameters>
                 <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
@@ -5344,55 +4922,22 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <conditionType>Condition</conditionType>
             </conditions>
             <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>BeginningNegativeBalance</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>Check IF ABS(Beginning Negative Balance) &gt; 0 [Positive Balance Currency has NEGATIVE value]</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionName>Negative Balance Greater OR Less than PerOrderRewards [Adjust Rewards Tracking for any NEGATIVE balance]</conditionName>
-                <conditionType>ConditionGroup</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>BeginningNegativeBalance</sourceFieldName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                    <valueType>Parameter</valueType>
-                </conditionFilterCriteria>
-                <conditionName>Beginning Negative Balance &gt; Consolidated PerOrderRewards Tracking</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>LessThanOrEquals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>BeginningNegativeBalance</sourceFieldName>
-                    <value>EA_PerOrderRewardsTracking</value>
-                    <valueType>Parameter</valueType>
-                </conditionFilterCriteria>
-                <conditionName>Beginning Negative Balance &lt;= Consolidated PerOrderRewards Tracking</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
+                <conditionCriteria>1 AND 2</conditionCriteria>
                 <conditionFilterCriteria>
                     <operator>GreaterThanOrEquals</operator>
                     <sequence>1</sequence>
-                    <sourceFieldName>EA_PerOrderRewardsTracking</sourceFieldName>
+                    <sourceFieldName>MC_PositiveCurrencyPointsBalance</sourceFieldName>
                     <value>VoucherTargetPoints</value>
                     <valueType>Parameter</valueType>
                 </conditionFilterCriteria>
-                <conditionName>A. IF Beginning Rewards + PerOrderRewards  &gt;= VoucherPointsTarget</conditionName>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>2</sequence>
+                    <sourceFieldName>DT_Outcome.Multiplier__c</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>A. IF Updated Currency Balance  &gt;= VoucherPointsTarget</conditionName>
                 <conditionType>Condition</conditionType>
             </conditions>
             <conditions>
@@ -5483,18 +5028,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <conditionName>If TotalVouchers to Issuse &gt; 3</conditionName>
                 <conditionType>Condition</conditionType>
             </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThanOrEquals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PointsBalance</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>If Positive Balance &gt; 0</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
             <description>Base rule execution step</description>
             <isProcessEligibilityRule>false</isProcessEligibilityRule>
             <previousRule>Double Points Promo</previousRule>
@@ -5503,7 +5036,7 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <status>Active</status>
             <stepMappings>
                 <associatedStep>PreCheck : IF VoucherCode EXIST</associatedStep>
-                <sequence>2</sequence>
+                <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>If the Brand value is null</associatedStep>
@@ -5511,37 +5044,18 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <sequence>3</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>Check IF ABS(Beginning Negative Balance) &gt; 0 [Positive Balance Currency has NEGATIVE value]</associatedStep>
-                <sequence>10</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Negative Balance Greater OR Less than PerOrderRewards [Adjust Rewards Tracking for any NEGATIVE balance]</associatedStep>
-                <parentStep>Check IF ABS(Beginning Negative Balance) &gt; 0 [Positive Balance Currency has NEGATIVE value]</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Beginning Negative Balance &gt; Consolidated PerOrderRewards Tracking</associatedStep>
-                <parentStep>Negative Balance Greater OR Less than PerOrderRewards [Adjust Rewards Tracking for any NEGATIVE balance]</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Beginning Negative Balance &lt;= Consolidated PerOrderRewards Tracking</associatedStep>
-                <parentStep>Negative Balance Greater OR Less than PerOrderRewards [Adjust Rewards Tracking for any NEGATIVE balance]</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>A. IF Beginning Rewards + PerOrderRewards  &gt;= VoucherPointsTarget</associatedStep>
-                <sequence>13</sequence>
+                <associatedStep>A. IF Updated Currency Balance  &gt;= VoucherPointsTarget</associatedStep>
+                <sequence>5</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>A.IF LineItemCount = 1</associatedStep>
-                <parentStep>A. IF Beginning Rewards + PerOrderRewards  &gt;= VoucherPointsTarget</parentStep>
+                <parentStep>A. IF Updated Currency Balance  &gt;= VoucherPointsTarget</parentStep>
                 <sequence>3</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Set Counter Value based on [LineItemTotalVouchersToIssue] based on scenario</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>4</sequence>
+                <sequence>2</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>LineItemTotalVouchersToIssue &gt; 3</associatedStep>
@@ -5556,30 +5070,22 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <stepMappings>
                 <associatedStep>Count 1 : If     [DirectIssueVoucherCounter] &lt; DirectIssueTotalCount</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>5</sequence>
+                <sequence>3</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Count 2 : If    [DirectIssueVoucherCounter] &lt; DirectIssueTotalCount</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>6</sequence>
+                <sequence>4</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Count 3 : If    [DirectIssueVoucherCounter] &lt; DirectIssueTotalCount</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>7</sequence>
+                <sequence>5</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>If TotalVouchers to Issuse &gt; 3</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>8</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>If Positive Balance &gt; 0</associatedStep>
-                <sequence>16</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>GET Positive Balance Currency</associatedStep>
-                <sequence>1</sequence>
+                <sequence>6</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Run Redeem Voucher Process</associatedStep>
@@ -5597,75 +5103,31 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>PerOrder Rewards Tracking EA: Increment by LineItem</associatedStep>
-                <sequence>3</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>TotalOrderPurchasePoints assigned via GET consolidated PerOrder Rewards Tracking EA</associatedStep>
-                <sequence>4</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Credit PositiveBalance Currency [add promo rewards; less voucher FV is vouchercode lineitem]</associatedStep>
-                <sequence>5</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Rewards Tracking EA: GET</associatedStep>
-                <sequence>6</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>BeginningRewardsTracking EA: Capture Value</associatedStep>
-                <sequence>7</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>PerOrderRewardsTracking EA: Consolidate PerOrder Rewards with Beginning Value</associatedStep>
-                <sequence>8</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Debug BEginning Negative Balance</associatedStep>
-                <sequence>9</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>A. Adjusted PerOrderRewardsTracking for Negative Balance</associatedStep>
-                <parentStep>Beginning Negative Balance &gt; Consolidated PerOrderRewards Tracking</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>B. Adjusted PerOrderRewardsTracking for Negative Balance</associatedStep>
-                <parentStep>Beginning Negative Balance &lt;= Consolidated PerOrderRewards Tracking</parentStep>
-                <sequence>1</sequence>
+                <associatedStep>Credit PositiveBalance Currency ADD Promo EA_PerLineItemOrderRewardsTracking [if voucherCode lineitem; less voucher FV]</associatedStep>
+                <sequence>2</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>GET RedeemVoucher FaceValue Consolidated</associatedStep>
-                <sequence>11</sequence>
+                <sequence>3</sequence>
             </stepMappings>
             <stepMappings>
-                <associatedStep>Debug if Rewards will be Triggered</associatedStep>
-                <sequence>12</sequence>
+                <associatedStep>GET Positive Balance Currency after Credits</associatedStep>
+                <sequence>4</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>A. Initialize LineItemCount</associatedStep>
-                <parentStep>A. IF Beginning Rewards + PerOrderRewards  &gt;= VoucherPointsTarget</parentStep>
+                <parentStep>A. IF Updated Currency Balance  &gt;= VoucherPointsTarget</parentStep>
                 <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>A. Increment LineItemCount</associatedStep>
-                <parentStep>A. IF Beginning Rewards + PerOrderRewards  &gt;= VoucherPointsTarget</parentStep>
+                <parentStep>A. IF Updated Currency Balance  &gt;= VoucherPointsTarget</parentStep>
                 <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Rewards Tracking for TargetMet flag and Reset</associatedStep>
-                <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>Assign Values to IssueVoucher Params (whole order basis) &amp; Initialize DirectIssueVoucherCounter = 0</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Calculate CurrentTotalRewards</associatedStep>
-                <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>3</sequence>
+                <sequence>1</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>1. Set DirectIssueTotalCount Value to 3</associatedStep>
@@ -5750,48 +5212,27 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <stepMappings>
                 <associatedStep>Run Debit Points</associatedStep>
                 <parentStep>A.IF LineItemCount = 1</parentStep>
-                <sequence>9</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>GET Positive Currency Balance</associatedStep>
-                <sequence>14</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Debug Points Balance</associatedStep>
-                <sequence>15</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>SYNC Rewards Tracking EA with PositiveBalance Currency</associatedStep>
-                <parentStep>If Positive Balance &gt; 0</parentStep>
-                <sequence>1</sequence>
+                <sequence>7</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>RESET PerOrder Rewards Tracking</associatedStep>
-                <sequence>17</sequence>
+                <sequence>6</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>RESET PerLineItemOrderRewards Tracking</associatedStep>
-                <sequence>18</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>RESET Beginning Rewards Tracking</associatedStep>
-                <sequence>19</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>RESET RemainderRewardsBalance</associatedStep>
-                <sequence>20</sequence>
+                <sequence>7</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>RESET RedeemVoucherFaceValueTracking</associatedStep>
-                <sequence>21</sequence>
+                <sequence>8</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>RESET RedeemVoucherFaceValue Consolidated Tracking</associatedStep>
-                <sequence>22</sequence>
+                <sequence>9</sequence>
             </stepMappings>
             <stepMappings>
                 <associatedStep>RESET LineItemCount to Zero</associatedStep>
-                <sequence>23</sequence>
+                <sequence>10</sequence>
             </stepMappings>
         </rules>
         <rules>
@@ -6019,26 +5460,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionName>Update Member Record</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Staff__c</parameterName>
-                    <value>{!Staff}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Apple_Wallet_Link__c</parameterName>
-                    <value>{!AppleWalletLink}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_outputId</parameterName>
-                    <value>MemberId</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
                     <parameterName>_entity</parameterName>
                     <value>LoyaltyProgramMember</value>
                 </actionParameters>
@@ -6076,6 +5497,26 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <operator>Equals</operator>
                     <parameterName>Country__c</parameterName>
                     <value>{!Country}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Staff__c</parameterName>
+                    <value>{!Staff}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Apple_Wallet_Link__c</parameterName>
+                    <value>{!AppleWalletLink}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_outputId</parameterName>
+                    <value>MemberId</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
                 </actionParameters>
                 <actionType>Crud</actionType>
                 <crudActionType>update</crudActionType>

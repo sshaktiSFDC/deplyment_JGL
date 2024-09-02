@@ -26,6 +26,11 @@
         <visible>true</visible>
     </applicationVisibilities>
     <applicationVisibilities>
+        <application>standard__DataManager</application>
+        <default>false</default>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
         <application>standard__FlowsApp</application>
         <default>false</default>
         <visible>true</visible>
@@ -206,6 +211,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>JgLoyaltyController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>LoyaltyMemberVoucherRestService</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -314,6 +323,14 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>SearchLoyaltyLedgerByContactController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SearchLoyaltyLedgerContactControllerTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TestDataFactory</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -331,6 +348,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>UpdateJournalEventActionTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UpdateTotalRewardPoints</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -3278,19 +3299,19 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.DoubleConsentCaptureDate</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.EffectiveFrom</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.EffectiveTo</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4319,6 +4340,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>TransactionJournal.Voucher_Definition_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Transaction_Journal_Update__e.Order_Item_No__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -4431,6 +4457,11 @@
         <editable>true</editable>
         <field>Voucher.VoucherCode</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>VoucherDefinition.Category__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -6738,6 +6769,10 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Transaction_Journal_Delete_Bulk_Voucher_Journals</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Transaction_Journal_Manual_Points_Adjustment</flow>
     </flowAccesses>
     <flowAccesses>
@@ -6755,6 +6790,14 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Transaction_Journal_Reversal_VoucherReversal_Value</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_total_reward_on_Loyalty_Program_Member_Autolaunched</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Voucher_AdHoc_Issuance_Generate_Journals_Ledgers</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -6964,6 +7007,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>OrderItem-Order Product Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PartyConsent-Party Consent Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>PersonAccount-Person Account Layout</layout>
@@ -7402,6 +7448,15 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
         <object>DataCommCapActvTarget</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <object>DataCommunicationCap</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -8714,6 +8769,14 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
+        <tab>Loyalty_Member</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Loyalty_Search_Members</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
         <tab>MobileLanding</tab>
         <visibility>DefaultOff</visibility>
     </tabVisibilities>
@@ -8961,10 +9024,10 @@
         <tab>standard-LoyaltyPgmGroupMbrRlnsp</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
-    <tabVisibilities>
+    <!-- <tabVisibilities>
         <tab>standard-LoyaltyPgmPartnerPromotion</tab>
         <visibility>DefaultOn</visibility>
-    </tabVisibilities>
+    </tabVisibilities> -->
     <tabVisibilities>
         <tab>standard-LoyaltyProgram</tab>
         <visibility>DefaultOn</visibility>
@@ -9149,10 +9212,10 @@
         <tab>standard-Recommendation</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
-    <tabVisibilities>
+    <!-- <tabVisibilities>
         <tab>standard-RevenueAsyncOperation</tab>
         <visibility>DefaultOn</visibility>
-    </tabVisibilities>
+    </tabVisibilities> -->
     <tabVisibilities>
         <tab>standard-RuleLibrary</tab>
         <visibility>Hidden</visibility>
@@ -9201,14 +9264,14 @@
         <tab>standard-UserProvisioningRequest</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
-    <tabVisibilities>
+    <!-- <tabVisibilities>
         <tab>standard-VideoCall</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
         <tab>standard-VideoCallParticipant</tab>
         <visibility>DefaultOn</visibility>
-    </tabVisibilities>
+    </tabVisibilities> -->
     <tabVisibilities>
         <tab>standard-Voucher</tab>
         <visibility>DefaultOn</visibility>

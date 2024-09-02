@@ -1,12 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <name>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_FireJBTrigger</name>
+        <label>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_FireJBTrigger</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>et4ae5__JBintFireBulkEvent</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>ContactKey</name>
+            <value>
+                <stringValue>{&quot;relationshipIdName&quot;:&quot;ContactId&quot;,&quot;relationshipName&quot;:&quot;Contact&quot;,&quot;isPolymorphic&quot;:false,&quot;referenceObjectName&quot;:&quot;Contact&quot;,&quot;fieldName&quot;:&quot;Id&quot;}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>SalesforceObjectId</name>
+            <value>
+                <elementReference>new_object.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>SalesforceObjectName</name>
+            <value>
+                <stringValue>Voucher</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>EventDefinitionKey</name>
+            <value>
+                <stringValue>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerMID</name>
+            <value>
+                <stringValue>518007360</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>VersionNumber</name>
+            <value>
+                <stringValue>3.0</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ContactPersonType</name>
+            <value>
+                <stringValue>Contact</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>EventDataConfig</name>
+            <value>
+                <stringValue>{&quot;objects&quot;:[{&quot;relationshipIdName&quot;:null,&quot;referenceObject&quot;:&quot;Contact&quot;,&quot;isPolymorphic&quot;:false,&quot;relationshipName&quot;:&quot;Contact&quot;,&quot;dePrefix&quot;:&quot;Voucher:Contact:&quot;,&quot;fields&quot;:[&quot;Id&quot;,&quot;Email&quot;,&quot;FirstName&quot;,&quot;HasOptedOutOfEmail&quot;]},{&quot;relationshipIdName&quot;:&quot;&quot;,&quot;referenceObject&quot;:&quot;&quot;,&quot;isPolymorphic&quot;:false,&quot;relationshipName&quot;:&quot;&quot;,&quot;dePrefix&quot;:&quot;Voucher:&quot;,&quot;fields&quot;:[&quot;Id&quot;,&quot;Name&quot;,&quot;Status&quot;,&quot;UseDate&quot;,&quot;CIM_Id__c&quot;,&quot;FaceValue&quot;,&quot;CreatedDate&quot;,&quot;VoucherCode&quot;,&quot;RedeemedValue&quot;,&quot;ExpirationDate&quot;,&quot;Reward_Name__c&quot;,&quot;Member_Email__c&quot;,&quot;Minimum_Spend__c&quot;,&quot;LoyaltyProgramMemberId&quot;]}]}</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>et4ae5__JBintFireBulkEvent</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
         <name>SalesforceObj8efbb348e12df0c195d8bfce0a72511c_FireJBTrigger</name>
         <label>SalesforceObj8efbb348e12df0c195d8bfce0a72511c_FireJBTrigger</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>et4ae5__JBintFireBulkEvent</actionName>
         <actionType>apex</actionType>
+        <connector>
+            <targetReference>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>ContactKey</name>
@@ -61,10 +126,47 @@
     </actionCalls>
     <apiVersion>49.0</apiVersion>
     <decisions>
+        <name>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</name>
+        <label>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>default</defaultConnectorLabel>
+        <rules>
+            <name>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Parameters_ContactKey_Null</name>
+            <conditionLogic>1</conditionLogic>
+            <conditions>
+                <leftValueReference>new_object.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Parameters_ContactKey_Null</label>
+        </rules>
+        <rules>
+            <name>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Parameters_Null</name>
+            <conditionLogic>1</conditionLogic>
+            <conditions>
+                <leftValueReference>old_object</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Decision</targetReference>
+            </connector>
+            <label>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Parameters_Null</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>JB_Decision_Null_Check_SalesforceObj8efbb348e12df0c195d8bfce0a72511c</name>
         <label>JB_Decision_Null_Check_SalesforceObj8efbb348e12df0c195d8bfce0a72511c</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>JB_SalesforceObj8efbb348e12df0c195d8bfce0a72511c_Parameters_ContactKey_Null</name>
@@ -76,6 +178,9 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</targetReference>
+            </connector>
             <label>JB_SalesforceObj8efbb348e12df0c195d8bfce0a72511c_Parameters_ContactKey_Null</label>
         </rules>
         <rules>
@@ -95,10 +200,49 @@
         </rules>
     </decisions>
     <decisions>
+        <name>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Decision</name>
+        <label>JB_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_Decision</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>default</defaultConnectorLabel>
+        <rules>
+            <name>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</name>
+            <conditionLogic>(1 And  (2 AND 3) )</conditionLogic>
+            <conditions>
+                <leftValueReference>new_object.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>new_object.VoucherDefinitionId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>new_object.VoucherDefinition.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Birthday Reward</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f_FireJBTrigger</targetReference>
+            </connector>
+            <label>SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>JB_SalesforceObj8efbb348e12df0c195d8bfce0a72511c_Decision</name>
         <label>JB_SalesforceObj8efbb348e12df0c195d8bfce0a72511c_Decision</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>JB_Decision_Null_Check_SalesforceObj33fa54ec0ebecd85c46d90d835a7772f</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>SalesforceObj8efbb348e12df0c195d8bfce0a72511c</name>

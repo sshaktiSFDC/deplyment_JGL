@@ -71,5 +71,7 @@ public without sharing class GlobalConstants {
     //Runtime Settings
     public static final Integer REWARD_VOUCHER_TARGET_POINTS = (Integer)Organisation_Settings__c.getOrgDefaults().Voucher_Points_Target_Value__c;
 
-
+    //SObject Name
+    public static final String LOYALTY_PROGRAM_MEMBER_NAME = 'LoyaltyProgramMember';
+    public static final String ACCOUNT_NAME = 'Account';
 }

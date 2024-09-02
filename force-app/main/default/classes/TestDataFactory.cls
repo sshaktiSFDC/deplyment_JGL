@@ -113,5 +113,25 @@ public with sharing class TestDataFactory {
         }
         return vouchers;
     }
-
+    
+    //Create Loyalty Program Currency
+    public static LoyaltyProgramCurrency createLoyaltyProgramCurrency(String name, String currencyType, Id loyaltyProgramId) {
+        return new LoyaltyProgramCurrency(
+            Name = name,
+            CurrencyType = currencyType,
+            LoyaltyProgramId = loyaltyProgramId,
+            IsActive = true,
+            IsPrimary = true
+        );
+    }
+    
+    //Create Loyalty Member Currency
+    public static LoyaltyMemberCurrency createLoyaltyMemberCurrency(String name, Id memberId, Id programCurrencyId) {
+        return new LoyaltyMemberCurrency(
+            Name = name,
+            LoyaltyMemberId = memberId,
+            LoyaltyProgramCurrencyId = programCurrencyId
+        );
+    }
+    
 }

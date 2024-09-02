@@ -1,0 +1,88 @@
+<template>
+
+    <div class="slds-box slds-theme_default">  
+
+        <lightning-card title="Search Loyalty Members">
+            <div class="slds-m-around_medium">
+                <div>
+                    <lightning-input
+                        type="text"
+                        label="Search" 
+                        value={searchKey}
+                        onchange={handleInputChange}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-top_small">
+                    <lightning-button
+                        label="Search"
+                        variant="brand"
+                        onclick={handleSearch} >
+                    </lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+
+
+
+
+
+        <template if:true={loyaltyMembers}>
+
+            <div class="slds-p-top_small">
+
+                <div class="slds-p-bottom_medium">
+                    Found {loyaltyMembers.length} memberss
+                </div>
+
+                <table class="slds-table slds-table_bordered slds-border_left slds-border_right">
+                    
+                    <thead>     
+                        <th class="slds-align-top" scope="col">
+                            Membership Number                        
+                        </th>
+                        <th class="slds-align-top" scope="col">
+                            First Name                      
+                        </th>
+                        <th class="slds-align-top" scope="col">
+                            Last Name                      
+                        </th>                                        
+                    </thead>
+            
+                    <tbody>
+
+                        <template for:each={loyaltyMembers} for:item="member" for:index="index">
+                            <tr data-id={member.Id} key={member.Id}>
+        
+                                <td data-label="Membership Number" data-id={member.MembershipNumber} onclick={openMemberRecord}>
+                                    {member.MembershipNumber}
+                                </td>                             
+        
+                                <td data-label="First Name">
+                                    {member.Contact.FirstName}
+                                </td>      
+
+                                <td data-label="Last Name">
+                                    {member.Contact.LastName}
+                                </td>
+        
+                            </tr>
+                        </template>
+                    </tbody>        
+            
+                </table>
+            </div>
+        </template>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</template>

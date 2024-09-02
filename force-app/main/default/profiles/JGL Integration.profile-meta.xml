@@ -26,6 +26,11 @@
         <visible>false</visible>
     </applicationVisibilities>
     <applicationVisibilities>
+        <application>standard__DataManager</application>
+        <default>false</default>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <applicationVisibilities>
         <application>standard__FlowsApp</application>
         <default>false</default>
         <visible>true</visible>
@@ -206,6 +211,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>JgLoyaltyController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>LoyaltyMemberVoucherRestService</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -314,6 +323,14 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>SearchLoyaltyLedgerByContactController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SearchLoyaltyLedgerContactControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TestDataFactory</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -331,6 +348,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>UpdateJournalEventActionTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UpdateTotalRewardPoints</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -3275,19 +3296,19 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.DoubleConsentCaptureDate</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.EffectiveFrom</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>PartyConsent.EffectiveTo</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4316,6 +4337,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>TransactionJournal.Voucher_Definition_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Transaction_Journal_Update__e.Order_Item_No__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -4427,6 +4453,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Voucher.VoucherCode</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>VoucherDefinition.Category__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -6735,6 +6766,10 @@
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
+        <flow>Transaction_Journal_Delete_Bulk_Voucher_Journals</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
         <flow>Transaction_Journal_Manual_Points_Adjustment</flow>
     </flowAccesses>
     <flowAccesses>
@@ -6752,6 +6787,14 @@
     <flowAccesses>
         <enabled>false</enabled>
         <flow>Transaction_Journal_Reversal_VoucherReversal_Value</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Update_total_reward_on_Loyalty_Program_Member_Autolaunched</flow>
+    </flowAccesses>
+    <flowAccesses>
+        <enabled>false</enabled>
+        <flow>Voucher_AdHoc_Issuance_Generate_Journals_Ledgers</flow>
     </flowAccesses>
     <flowAccesses>
         <enabled>false</enabled>
@@ -6794,6 +6837,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>LoyaltyTierGroup-Loyalty Tier Group Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PartyConsent-Party Consent Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>PersonAccount-Person Account Layout</layout>
@@ -7053,6 +7099,14 @@
     <tabVisibilities>
         <tab>JGL_Member_Data_Migration__c</tab>
         <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Loyalty_Member</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Loyalty_Search_Members</tab>
+        <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
         <tab>MobileLanding</tab>

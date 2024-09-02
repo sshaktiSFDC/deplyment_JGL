@@ -120,6 +120,7 @@
         <fields>ExpirationPeriodUnit</fields>
         <fields>Type</fields>
         <fields>IsActive</fields>
+        <fields>Category__c</fields>
         <relatedList>VoucherDefinitions</relatedList>
     </relatedLists>
     <relatedLists>

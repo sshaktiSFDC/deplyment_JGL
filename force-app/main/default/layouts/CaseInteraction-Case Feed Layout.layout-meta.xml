@@ -167,11 +167,6 @@
             <posY>3</posY>
         </summaryLayoutItems>
         <summaryLayoutItems>
-            <field>OwnerId</field>
-            <posX>2</posX>
-            <posY>2</posY>
-        </summaryLayoutItems>
-        <summaryLayoutItems>
             <field>Status</field>
             <posX>2</posX>
             <posY>0</posY>
@@ -180,6 +175,11 @@
             <field>Priority</field>
             <posX>2</posX>
             <posY>1</posY>
+        </summaryLayoutItems>
+        <summaryLayoutItems>
+            <field>OwnerId</field>
+            <posX>2</posX>
+            <posY>2</posY>
         </summaryLayoutItems>
         <summaryLayoutStyle>CaseInteraction</summaryLayoutStyle>
     </summaryLayout>

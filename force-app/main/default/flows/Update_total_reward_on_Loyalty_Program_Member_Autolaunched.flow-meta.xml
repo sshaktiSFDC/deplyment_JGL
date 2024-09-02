@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Update_total_reward_on_Loyalty_Program_Member</name>
+        <label>Update total reward on Loyalty Program Member</label>
+        <locationX>558</locationX>
+        <locationY>237</locationY>
+        <actionName>Updates_total_reward_points_fields_on_member</actionName>
+        <actionType>dataProcessingEngineAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>lastOneHour</name>
+            <value>
+                <elementReference>LastOneHour</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Updates_total_reward_points_fields_on_member</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>LastOneHour</name>
+        <dataType>DateTime</dataType>
+        <expression>{!$Flow.CurrentDateTime} - (1/24)</expression>
+    </formulas>
+    <interviewLabel>Update total reward on Loyalty Program Member Autolaunched {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update total reward on Loyalty Program Member Autolaunched</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>554</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Update_total_reward_on_Loyalty_Program_Member</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

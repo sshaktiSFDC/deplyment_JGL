@@ -42,12 +42,12 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <relatedLists>
+    <!-- <relatedLists>
         <fields>Name</fields>
         <fields>LoyaltyTier</fields>
         <fields>Benefit</fields>
         <relatedList>LoyaltyTierBenefits</relatedList>
-    </relatedLists>
+    </relatedLists> -->
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
