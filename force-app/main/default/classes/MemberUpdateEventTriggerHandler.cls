@@ -26,7 +26,7 @@ public class MemberUpdateEventTriggerHandler extends TriggerHandler {
         System.debug('subscribeEventsAndDoCallout');
 
         List<CanonicalLoyaltyWalletUpdate.Request> requests = new List<CanonicalLoyaltyWalletUpdate.Request>();        
-        List<LoyaltyProgramMember> memberList= [SELECT Id, Contact.FirstName, Contact.LastName, Status_Points__c, Total_Rewards__c, MembershipNumber, Voucher_Points__c 
+        List<LoyaltyProgramMember> memberList= [SELECT Id, Contact.FirstName, Contact.LastName, Status_Points__c,Current_Status_Points__c, Total_Rewards__c, MembershipNumber, Voucher_Points__c 
                                                 FROM LoyaltyProgramMember
                                                 WHERE Id IN:memberIds];
         
@@ -40,9 +40,9 @@ public class MemberUpdateEventTriggerHandler extends TriggerHandler {
             //req.tierLevel = 'base';
             req.totalPoints = Integer.valueOf(member.Status_Points__c);
             req.totalRewards = member.Total_Rewards__c;
-            req.nextRewardPoints = Integer.valueOf(member.Voucher_Points__c);
+            req.nextRewardPoints = Integer.valueOf(member.Current_Status_Points__c);
             requests.add(req);
-        }
+        } 
         
         // Convert requests to JSON
         String jsonBody = JSON.serialize(requests);

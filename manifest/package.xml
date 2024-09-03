@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<types>
-		<members>JGL_API_Integration_Access</members>
-		<members>JGL_Admin_Access</members>
-		<members>JGL_Integration_Access</members>
-		<members>JGL_Loyalty_Access</members>
-		<members>JGL_Password_No_Expiration</members>
-		<members>sfdcInternalInt__sfdc_scrt2</members>
-		<name>PermissionSet</name>
-	</types>
-	<types>
-		<members>MemberUpdateEventTriggerConfig</members>
-		<members>ProcessRewardsEventTriggerConfig</members>
-		<name>PlatformEventSubscriberConfig</name>
-	</types>
-	<version>60.0</version>
+    <types>
+        <members>LoyaltyWalletLinksRestService</members>
+        <members>MemberUpdateEventTriggerHandler</members>
+        <members>ProcessRewardsAction</members>
+        <members>ProcessRewardsEventTriggerHandler</members>
+        <members>SearchLoyaltyLedgerByContactController</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Create_Bulk_Manual_Points_Adjustments</members>
+        <name>BatchCalcJobDefinition</name>
+    </types>
+    <types>
+        <members>LoyaltyProgramMember.CIM_Id__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Just_Shop</members>
+        <name>LoyaltyProgramSetup</name>
+    </types>
+    
+    <types>
+        <members>Analytics Cloud Integration User</members>
+        <members>JGL Baseline</members>
+        <members>JGL Integration</members>
+        <name>Profile</name>
+    </types>
+    <version>60.0</version>
 </Package>

@@ -182,19 +182,17 @@ public with sharing class ProcessRewardsEventTriggerHandler extends TriggerHandl
 
             //Loop through # of vouchers to create
             for(Integer count = 1; count <= rec.totalVouchersToIssue; count++) {
+                
+             
                 LoyaltyManagement.IssueVoucherInputBuilder voucher = new LoyaltyManagement.IssueVoucherInputBuilder();
                 voucher.setLoyaltyProgramMemberId(rec.memberId);
                 voucher.setProgramName(GlobalConstants.LOYALTY_PROGRAM_NAME);
                 voucher.setVoucherDefinitionName(GlobalConstants.VOUCHER_DEFINITION_REWARD);
-                //voucher.setJournalId(rec.Id);
-
-                //TODO: We need to use Accrual journal date to as Effective Date when issuing vouchers
-  	            //voucher.setEffectiveDate(effectiveDate);
-  	            //voucher.setExpiryDate(expirationDate);
-	            //voucher.setFaceValue(10);
+                voucher.setAdditionalNotes(rec.orderId+'@channel@'+rec.channel);
+                
 
                 issueVoucherList.add(voucher.build());
-            }
+              } 
 
             outputs.add(output);
         }
@@ -215,14 +213,25 @@ public with sharing class ProcessRewardsEventTriggerHandler extends TriggerHandl
                 }
             }
             System.debug('voucherIds = ' + voucherIds);
-
+            List<Voucher> vouchersCreated = [SELECT id, Reason  FROM Voucher where id IN:voucherIds];
             List<Voucher> vouchersToUpdate = new List<Voucher>();
-            for(Id voucherId : voucherIds) {
+            System.debug('processRewardTriggerHandler: vouchersToUpdate = ' + vouchersToUpdate);
+            for(Voucher voucherCr : vouchersCreated) {
+               String vChannel = voucherCr.Reason.substringAfter('@channel@'); 
+               if(!string.isblank(vChannel) && vChannel != 'null'){
                 vouchersToUpdate.add( new Voucher(
-                    Id = voucherId,
-                    Order_Id_Issue__c = inputs[0].orderId,
-                    Order_Id_Issue_Channel__c = inputs[0].channel
+                    Id = voucherCr.Id,
+                    Order_Id_Issue__c = voucherCr.Reason.substringBefore('@channel@'),
+                    Order_Id_Issue_Channel__c = voucherCr.Reason.substringAfter('@channel@')
                 ));
+               } else {
+                   vouchersToUpdate.add( new Voucher(
+                    Id = voucherCr.Id,
+                    Order_Id_Issue__c = voucherCr.Reason.substringBefore('@channel@')
+                   
+                ));
+                   
+               }
             }
             System.debug('vouchersToUpdate = ' + vouchersToUpdate);
 

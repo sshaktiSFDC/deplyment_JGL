@@ -2,628 +2,6 @@
 <LoyaltyProgramSetup xmlns="http://soap.sforce.com/2006/04/metadata">
     <label>Just Shop</label>
     <programProcesses>
-        <executionType>RealTime</executionType>
-        <journalType>Manual Points Adjustment</journalType>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PositiveBalanceCurrency</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EA_PerAdjustmentRewardTracking</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PointsAdjusted</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EventType</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EA_RewardsTracking</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherTargetPoints</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PointsToDebitForVoucherIssue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>LineItemTotalVoucherToIssue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>LineItemTotalVoucherFaceValue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherFaceValue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>GeneratedOrderCode</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherDefinitionName</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.Voucher_Definition_Name__c}</value>
-        </parameters>
-        <processName>Manual Points Adjustments</processName>
-        <processType>TransactionJournal</processType>
-        <rules>
-            <actions>
-                <actionName>Retrieve Points for Adjustment from Ledgers</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberId</parameterName>
-                    <value>{!TransactionJournal.MemberId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>JournalId</parameterName>
-                    <value>{!TransactionJournal.Id}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>LedgerPoints</parameterName>
-                    <value>PointsAdjusted</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EventType</parameterName>
-                    <value>EventType</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Get_Points_for_Manual_Adjustments</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>GET Runtime VoucherDefinition Values</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherRewardTargetPoints</parameterName>
-                    <value>VoucherTargetPoints</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherRewardFaceValue</parameterName>
-                    <value>VoucherFaceValue</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Get_Runtime_Configuration</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>Credit Adjustment Points</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsToCredit</parameterName>
-                    <value>CEILING({!TransactionJournal.TransactionAmount} )</value>
-                </actionParameters>
-                <actionType>CreditPoints</actionType>
-            </actions>
-            <actions>
-                <actionName>Debit Adjustment Points</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsToDebit</parameterName>
-                    <value>ABS(CEILING({!TransactionJournal.TransactionAmount} ))</value>
-                </actionParameters>
-                <actionType>DebitPoints</actionType>
-            </actions>
-            <actions>
-                <actionName>GET Positive Balance Currency [After Adjustment ]</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>PositiveBalanceCurrency</value>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Assign Values for Vouchers Issuance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsToDebitForVoucherIssue</parameterName>
-                    <sequenceNumber>1</sequenceNumber>
-                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )*{!VoucherTargetPoints}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>LineItemTotalVoucherToIssue</parameterName>
-                    <sequenceNumber>2</sequenceNumber>
-                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>LineItemTotalVoucherFaceValue</parameterName>
-                    <sequenceNumber>3</sequenceNumber>
-                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )*{!VoucherFaceValue}</value>
-                </actionParameters>
-                <actionType>AssignParameterValues</actionType>
-            </actions>
-            <actions>
-                <actionName>Generate OrderID Code</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherDefinitionName</parameterName>
-                    <value>&quot;Reward&quot;</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherCount</parameterName>
-                    <value>1</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherCodesToGenerate</parameterName>
-                    <value>1</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherCodes</parameterName>
-                    <value>GeneratedOrderCode</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Generate_Voucher_Codes</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>Update Journal OrderId field</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>TransactionJournal</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!TransactionJournal.Id}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Order_ID__c</parameterName>
-                    <value>{!GeneratedOrderCode}</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>TransactionJournal</entityApiName>
-            </actions>
-            <actions>
-                <actionName>Publish PE to Issue Actual Vouchers</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberId</parameterName>
-                    <value>{!TransactionJournal.MemberId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>TotalVouchersToIssue</parameterName>
-                    <value>{!LineItemTotalVoucherToIssue}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>OrderId</parameterName>
-                    <value>{!GeneratedOrderCode}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramId</parameterName>
-                    <value>{!TransactionJournal.LoyaltyProgramId}</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Publish_Event_Process_Rewards</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>Run Debit Points and Journals for Voucher Issuance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ActivityDate</parameterName>
-                    <value>{!TransactionJournal.ActivityDate}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Order_ID__c</parameterName>
-                    <value>{!GeneratedOrderCode}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Voucher_Count__c</parameterName>
-                    <value>{!LineItemTotalVoucherToIssue}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberId</parameterName>
-                    <value>{!TransactionJournal.MemberId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>JournalDate</parameterName>
-                    <value>{!TransactionJournal.JournalDate}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>TransactionAmount</parameterName>
-                    <value>{!PointsToDebitForVoucherIssue}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Channel_Name__c</parameterName>
-                    <value>{!TransactionJournal.Channel}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Channel</parameterName>
-                    <value>{!TransactionJournal.Channel}</value>
-                </actionParameters>
-                <actionType>RunProgramProcess</actionType>
-                <loyaltyProgramProcess>Rewards Redemption Process</loyaltyProgramProcess>
-            </actions>
-            <conditions>
-                <conditionCriteria>(1 OR 2 ) AND 3 AND 4</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
-                    <value>NULL</value>
-                    <valueType>Formula</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>2</sequence>
-                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>3</sequence>
-                    <sourceFieldName>TransactionJournal.Order_Item_ID__c</sourceFieldName>
-                    <value>&apos;&apos;</value>
-                    <valueType>Formula</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>Equals</operator>
-                    <sequence>4</sequence>
-                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
-                    <value>&apos;&apos;</value>
-                    <valueType>Formula</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionName>IF Transaction Amount NOT NULL</conditionName>
-                <conditionType>ConditionGroup</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>And Amount &gt; 0</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>LessThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>And Amount &lt; 0</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThanOrEquals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>VoucherTargetPoints</value>
-                    <valueType>Parameter</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <isProcessEligibilityRule>false</isProcessEligibilityRule>
-            <previousRule>Bulk Voucher Upload</previousRule>
-            <ruleName>Set Up Step</ruleName>
-            <startDate>2024-03-01</startDate>
-            <status>Active</status>
-            <stepMappings>
-                <associatedStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</associatedStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>IF Transaction Amount NOT NULL</associatedStep>
-                <sequence>3</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>And Amount &gt; 0</associatedStep>
-                <parentStep>IF Transaction Amount NOT NULL</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>And Amount &lt; 0</associatedStep>
-                <parentStep>IF Transaction Amount NOT NULL</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</associatedStep>
-                <sequence>5</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Retrieve Points for Adjustment from Ledgers</associatedStep>
-                <parentStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>GET Runtime VoucherDefinition Values</associatedStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Credit Adjustment Points</associatedStep>
-                <parentStep>And Amount &gt; 0</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Debit Adjustment Points</associatedStep>
-                <parentStep>And Amount &lt; 0</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>GET Positive Balance Currency [After Adjustment ]</associatedStep>
-                <sequence>4</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Assign Values for Vouchers Issuance</associatedStep>
-                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Generate OrderID Code</associatedStep>
-                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Journal OrderId field</associatedStep>
-                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
-                <sequence>3</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Publish PE to Issue Actual Vouchers</associatedStep>
-                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
-                <sequence>4</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Run Debit Points and Journals for Voucher Issuance</associatedStep>
-                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
-                <sequence>5</sequence>
-            </stepMappings>
-        </rules>
-        <rules>
-            <actions>
-                <actionName>GET Positive Balance Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>PositiveBalanceCurrency</value>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Update Status Points</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>LoyaltyProgramMember</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!TransactionJournal.MemberId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Status_Points__c</parameterName>
-                    <value>{!PositiveBalanceCurrency}</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>LoyaltyProgramMember</entityApiName>
-            </actions>
-            <isProcessEligibilityRule>false</isProcessEligibilityRule>
-            <previousRule>Set Up Step</previousRule>
-            <ruleName>Finalize</ruleName>
-            <startDate>2024-03-01</startDate>
-            <status>Active</status>
-            <stepMappings>
-                <associatedStep>GET Positive Balance Currency</associatedStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Status Points</associatedStep>
-                <sequence>2</sequence>
-            </stepMappings>
-        </rules>
-        <rules>
-            <actions>
-                <actionName>Issue Voucher by Definition Name</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherDefinitionName</parameterName>
-                    <value>{!VoucherDefinitionName}</value>
-                    <valueType>Parameter</valueType>
-                </actionParameters>
-                <actionType>IssueVoucher</actionType>
-            </actions>
-            <actions>
-                <actionName>Update Journal VoucherDefinition to TBD</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>TransactionJournal</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!TransactionJournal.Id}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Voucher_Definition_Name__c</parameterName>
-                    <value>&quot;TBD&quot;</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>TransactionJournal</entityApiName>
-            </actions>
-            <conditions>
-                <conditionCriteria>1 AND 2</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>NotEquals</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
-                    <value>&apos;&apos;</value>
-                    <valueType>Formula</valueType>
-                </conditionFilterCriteria>
-                <conditionFilterCriteria>
-                    <operator>NotEquals</operator>
-                    <sequence>2</sequence>
-                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
-                    <value>NULL</value>
-                    <valueType>Formula</valueType>
-                </conditionFilterCriteria>
-                <conditionName>IF VoucherDefinitonName is NOT BLANK</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <isProcessEligibilityRule>false</isProcessEligibilityRule>
-            <ruleName>Bulk Voucher Upload</ruleName>
-            <startDate>2024-03-01</startDate>
-            <status>Active</status>
-            <stepMappings>
-                <associatedStep>IF VoucherDefinitonName is NOT BLANK</associatedStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Issue Voucher by Definition Name</associatedStep>
-                <parentStep>IF VoucherDefinitonName is NOT BLANK</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Journal VoucherDefinition to TBD</associatedStep>
-                <parentStep>IF VoucherDefinitonName is NOT BLANK</parentStep>
-                <sequence>2</sequence>
-            </stepMappings>
-        </rules>
-        <status>Active</status>
-    </programProcesses>
-    <programProcesses>
         <description>Process to award points to new member enrolled into the program</description>
         <executionType>RealTime</executionType>
         <journalSubType>Member Enrollment</journalSubType>
@@ -1580,49 +958,721 @@
         <status>Active</status>
     </programProcesses>
     <programProcesses>
+        <description>Handle rewards redemption by debiting points</description>
         <executionType>RealTime</executionType>
-        <journalSubType>Reversal</journalSubType>
-        <journalType>Accrual</journalType>
+        <journalSubType>Reward</journalSubType>
+        <journalType>Redemption</journalType>
         <parameters>
             <dataType>Numeric</dataType>
             <decimalPlaces>0</decimalPlaces>
-            <description>Parameter to store total amount of original order ; in order to compare whether full or partial refund</description>
+            <description>Store to current Positive Balance engagement attribute</description>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>TotalOriginalOrderAmt</parameterName>
+            <parameterName>EA_PositiveBalanceTracking</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>2</decimalPlaces>
+            <description>Face value of reward vouchers being issued</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherFaceValue</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>Target points to issue reward vouchers</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherTargetPoints</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>This is the loyalty member ID to process the journal</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>MemberID</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.MemberId}</value>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Loyalty Program Name</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>ProgramName</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Voucher Definition Name being used to issue reward vouchers</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherRewardDefinition</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>Store the current Positive Balance Currency</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>PositiveBalanceCurrency</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>This is the per-calculated points to deduct. from the currency. Since each accrual journal will attempt to deduct points we need to divide the points to deduct based on # of accrual items being processed.</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>TotalPointsToDebit</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TotalVouchersToIssue} * {!VoucherTargetPoints}</value>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>Store total number of accrual items being processed so far</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EA_AccrualItemTracking</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>Total # of vouchers to issue</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>TotalVouchersToIssue</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Voucher_Count__c}</value>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <description>NOT BEING USED</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EA_RedemptionTracking</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Loyalty Program ID</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>ProgramID</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.LoyaltyProgram.Id}</value>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Order ID associated with this Redemption</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>OrderID</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Order_ID__c}</value>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Set Event Type = Redemption</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EventType</parameterName>
+            <parameterType>Constant</parameterType>
+            <value>Redemption</value>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Order Item ID associated with this Redemption</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>OrderItemID</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Order_Item_ID__c}</value>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Channel associated with the Order ID. Must use channel name formula field</description>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>Channel</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Channel_Name__c}</value>
+        </parameters>
+        <processName>Rewards Redemption Process</processName>
+        <processType>TransactionJournal</processType>
+        <rules>
+            <actions>
+                <actionName>Run Flow - Get Runtime Configuration</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherRewardDefinitionName</parameterName>
+                    <value>VoucherRewardDefinition</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherRewardTargetPoints</parameterName>
+                    <value>VoucherTargetPoints</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>LoyaltyProgramName</parameterName>
+                    <value>ProgramName</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherRewardFaceValue</parameterName>
+                    <value>VoucherFaceValue</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Get_Runtime_Configuration</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>Get PositiveBalanceCurrency</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>PositiveBalanceCurrency</value>
+                </actionParameters>
+                <actionType>GetMemberPointBalance</actionType>
+            </actions>
+            <actions>
+                <actionName>Run Flow - Debug</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Message5</parameterName>
+                    <value>TEXT( {!EA_AccrualItemTracking}  )</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Message3</parameterName>
+                    <value>TEXT( {!EA_PositiveBalanceTracking} )</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Message2</parameterName>
+                    <value>TEXT( {!PositiveBalanceCurrency} )</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Message1</parameterName>
+                    <value>TEXT( {!TotalPointsToDebit} )</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Message4</parameterName>
+                    <value>{!TransactionJournal.Channel_Name__c}</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>Debit Positive Balance Currency</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToDebit</parameterName>
+                    <value>{!TotalPointsToDebit}</value>
+                </actionParameters>
+                <actionType>DebitPoints</actionType>
+            </actions>
+            <actions>
+                <actionName>GET Positive Balance Currency</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>PositiveBalanceCurrency</value>
+                </actionParameters>
+                <actionType>GetMemberPointBalance</actionType>
+            </actions>
+            <actions>
+                <actionName>Update Member - Status Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>LoyaltyProgramMember</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!MemberID}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Status_Points__c</parameterName>
+                    <value>{!PositiveBalanceCurrency}</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>LoyaltyProgramMember</entityApiName>
+            </actions>
+            <actions>
+                <actionName>Overwrite RewardTracking EA with Current Positive Balance</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>EngagementAttributeName</parameterName>
+                    <value>Rewards Tracking</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>UpdateType</parameterName>
+                    <value>OverwriteCurrentValue</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Value</parameterName>
+                    <value>{!PositiveBalanceCurrency}</value>
+                </actionParameters>
+                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
+            </actions>
+            <actions>
+                <actionName>Run Flow - Handle Redemption Journal</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>EventType</parameterName>
+                    <value>{!EventType}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Channel</parameterName>
+                    <value>{!TransactionJournal.Channel_Name__c}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>TotalPointsToDebit</parameterName>
+                    <value>{!TotalPointsToDebit}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>TotalRewards</parameterName>
+                    <value>{!TotalPointsToDebit}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>OrderID</parameterName>
+                    <value>{!OrderID}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramID</parameterName>
+                    <value>{!ProgramID}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>OrderItemID</parameterName>
+                    <value>{!OrderItemID}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MemberID</parameterName>
+                    <value>{!MemberID}</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Process_Rewards</flowDefinition>
+            </actions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>GreaterThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>If Positive Balance &gt; 0</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <ruleName>Base Rule</ruleName>
+            <startDate>2024-04-01</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>If Positive Balance &gt; 0</associatedStep>
+                <sequence>7</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Run Flow - Get Runtime Configuration</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Get PositiveBalanceCurrency</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Run Flow - Debug</associatedStep>
+                <sequence>3</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Debit Positive Balance Currency</associatedStep>
+                <sequence>4</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>GET Positive Balance Currency</associatedStep>
+                <sequence>5</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Member - Status Points</associatedStep>
+                <sequence>6</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Overwrite RewardTracking EA with Current Positive Balance</associatedStep>
+                <parentStep>If Positive Balance &gt; 0</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Run Flow - Handle Redemption Journal</associatedStep>
+                <sequence>8</sequence>
+            </stepMappings>
+        </rules>
+        <status>Active</status>
+    </programProcesses>
+    <programProcesses>
+        <description>Updates member details such as first name, last name, email ID, and mobile phone number.</description>
+        <executionType>RealTime</executionType>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>The membership number of the loyalty program member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>MembershipNumber</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>The identifier of the loyalty program member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>true</isOutput>
+            <parameterName>MemberId</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Name of the channel used for enrolling in the loyalty program.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EnrollmentChannel</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Date</dataType>
+            <description>Date on which the member enrolled in the loyalty program.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EnrollmentDate</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Identifier of the contact that&apos;s associated with the loyalty program member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>true</isOutput>
+            <parameterName>ContactId</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Surname or the family name of the member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>LastName</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>A given name of the member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>FirstName</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Mobile phone number of the member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>MobilePhone</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Email address of the member.</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>Email</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
             <dataType>Text</dataType>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
+            <isOutput>true</isOutput>
+            <parameterName>TransactionJournalId</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Update country field on Loyalty Member record</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
             <isOutput>false</isOutput>
-            <parameterName>ConcatenatedPointsCreditedOutput</parameterName>
+            <parameterName>Country</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Update State field on Loyalty Member record</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>State</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Date</dataType>
+            <description>Update Birthdate on Person Account record</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>Birthdate</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
             <dataType>Boolean</dataType>
+            <description>Update Staff field on Loyalty Member record</description>
             <isCollection>false</isCollection>
-            <isInput>false</isInput>
+            <isInput>true</isInput>
             <isOutput>false</isOutput>
-            <parameterName>JournalsNotFound</parameterName>
+            <parameterName>Staff</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
             <dataType>Text</dataType>
+            <description>Update Apple Wallet Link field on Loyalty Member record</description>
             <isCollection>false</isCollection>
-            <isInput>false</isInput>
+            <isInput>true</isInput>
             <isOutput>false</isOutput>
-            <parameterName>ConcatenatedreturnChannelValue</parameterName>
+            <parameterName>AppleWalletLink</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
             <dataType>Text</dataType>
+            <description>Update Google Wallet Link field on Loyalty Member record</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>GoogleWalletLink</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <description>Update Member Status field to re-enrol Loyalty Member</description>
+            <isCollection>false</isCollection>
+            <isInput>true</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>MemberStatus</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <processName>UpdateMemberDetails</processName>
+        <processType>UpdateMemberDetails</processType>
+        <rules>
+            <actions>
+                <actionName>Update Member Record</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>LoyaltyProgramMember</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!MemberId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>State__c</parameterName>
+                    <value>{!State}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>EnrollmentChannel</parameterName>
+                    <value>{!EnrollmentChannel}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Google_Wallet_Link__c</parameterName>
+                    <value>{!GoogleWalletLink}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MembershipNumber</parameterName>
+                    <value>{!MembershipNumber}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>EnrollmentDate</parameterName>
+                    <value>{!EnrollmentDate}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Country__c</parameterName>
+                    <value>{!Country}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Staff__c</parameterName>
+                    <value>{!Staff}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Apple_Wallet_Link__c</parameterName>
+                    <value>{!AppleWalletLink}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_outputId</parameterName>
+                    <value>MemberId</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>LoyaltyProgramMember</entityApiName>
+            </actions>
+            <actions>
+                <actionName>Update Member&apos;s Contact Record</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>Contact</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!ContactId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Email</parameterName>
+                    <value>{!Email}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MobilePhone</parameterName>
+                    <value>{!MobilePhone}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>LastName</parameterName>
+                    <value>{!LastName}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>FirstName</parameterName>
+                    <value>{!FirstName}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_outputId</parameterName>
+                    <value>ContactId</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Birthdate</parameterName>
+                    <value>{!Birthdate}</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>Contact</entityApiName>
+            </actions>
+            <description>Modifies the member record and the associated contact record.</description>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <ruleName>Update Member Details</ruleName>
+            <startDate>2024-03-14</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>Update Member Record</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Member&apos;s Contact Record</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+        </rules>
+        <status>Active</status>
+    </programProcesses>
+    <programProcesses>
+        <executionType>RealTime</executionType>
+        <journalType>Manual Points Adjustment</journalType>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>returnPerOrderTotalAmountKey</parameterName>
+            <parameterName>PositiveBalanceCurrency</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1631,7 +1681,16 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>perOrderReturnAmount</parameterName>
+            <parameterName>EA_PerAdjustmentRewardTracking</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>PointsAdjusted</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1639,7 +1698,61 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>ConcatenatedTotalReturnAmount</parameterName>
+            <parameterName>EventType</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>EA_RewardsTracking</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherTargetPoints</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>PointsToDebitForVoucherIssue</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>LineItemTotalVoucherToIssue</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>LineItemTotalVoucherFaceValue</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>VoucherFaceValue</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1647,7 +1760,7 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>ConcatenatedOriginalOrderAmount</parameterName>
+            <parameterName>GeneratedOrderCode</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1655,25 +1768,581 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>OriginalOrderAmountKey</parameterName>
-            <parameterType>Variable</parameterType>
+            <parameterName>VoucherDefinitionName</parameterName>
+            <parameterType>Formula</parameterType>
+            <value>{!TransactionJournal.Voucher_Definition_Name__c}</value>
         </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>returnPerOrderChannel</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>returnPerOrderChannelKey</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
+        <processName>Manual Points Adjustments</processName>
+        <processType>TransactionJournal</processType>
+        <rules>
+            <actions>
+                <actionName>Retrieve Points for Adjustment from Ledgers</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MemberId</parameterName>
+                    <value>{!TransactionJournal.MemberId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>JournalId</parameterName>
+                    <value>{!TransactionJournal.Id}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>LedgerPoints</parameterName>
+                    <value>PointsAdjusted</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>EventType</parameterName>
+                    <value>EventType</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Get_Points_for_Manual_Adjustments</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>GET Runtime VoucherDefinition Values</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherRewardTargetPoints</parameterName>
+                    <value>VoucherTargetPoints</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherRewardFaceValue</parameterName>
+                    <value>VoucherFaceValue</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Get_Runtime_Configuration</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>Credit Adjustment Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToCredit</parameterName>
+                    <value>CEILING({!TransactionJournal.TransactionAmount} )</value>
+                </actionParameters>
+                <actionType>CreditPoints</actionType>
+            </actions>
+            <actions>
+                <actionName>Debit Adjustment Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToDebit</parameterName>
+                    <value>ABS(CEILING({!TransactionJournal.TransactionAmount} ))</value>
+                </actionParameters>
+                <actionType>DebitPoints</actionType>
+            </actions>
+            <actions>
+                <actionName>GET Positive Balance Currency [After Adjustment ]</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>PositiveBalanceCurrency</value>
+                </actionParameters>
+                <actionType>GetMemberPointBalance</actionType>
+            </actions>
+            <actions>
+                <actionName>Assign Values for Vouchers Issuance</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsToDebitForVoucherIssue</parameterName>
+                    <sequenceNumber>1</sequenceNumber>
+                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )*{!VoucherTargetPoints}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>LineItemTotalVoucherToIssue</parameterName>
+                    <sequenceNumber>2</sequenceNumber>
+                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>LineItemTotalVoucherFaceValue</parameterName>
+                    <sequenceNumber>3</sequenceNumber>
+                    <value>FLOOR({!PositiveBalanceCurrency}   / {!VoucherTargetPoints} )*{!VoucherFaceValue}</value>
+                </actionParameters>
+                <actionType>AssignParameterValues</actionType>
+            </actions>
+            <actions>
+                <actionName>Generate OrderID Code</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherDefinitionName</parameterName>
+                    <value>&quot;Reward&quot;</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherCount</parameterName>
+                    <value>1</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherCodesToGenerate</parameterName>
+                    <value>1</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherCodes</parameterName>
+                    <value>GeneratedOrderCode</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Generate_Voucher_Codes</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>Update Journal OrderId field</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>TransactionJournal</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!TransactionJournal.Id}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Order_ID__c</parameterName>
+                    <value>{!GeneratedOrderCode}</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>TransactionJournal</entityApiName>
+            </actions>
+            <actions>
+                <actionName>Publish PE to Issue Actual Vouchers</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MemberId</parameterName>
+                    <value>{!TransactionJournal.MemberId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>TotalVouchersToIssue</parameterName>
+                    <value>{!LineItemTotalVoucherToIssue}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>OrderId</parameterName>
+                    <value>{!GeneratedOrderCode}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramId</parameterName>
+                    <value>{!TransactionJournal.LoyaltyProgramId}</value>
+                </actionParameters>
+                <actionType>RunFlow</actionType>
+                <flowDefinition>Loyalty_Process_Publish_Event_Process_Rewards</flowDefinition>
+            </actions>
+            <actions>
+                <actionName>Run Debit Points and Journals for Voucher Issuance</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ActivityDate</parameterName>
+                    <value>{!TransactionJournal.ActivityDate}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Order_ID__c</parameterName>
+                    <value>{!GeneratedOrderCode}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Voucher_Count__c</parameterName>
+                    <value>{!LineItemTotalVoucherToIssue}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>MemberId</parameterName>
+                    <value>{!TransactionJournal.MemberId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>JournalDate</parameterName>
+                    <value>{!TransactionJournal.JournalDate}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>TransactionAmount</parameterName>
+                    <value>{!PointsToDebitForVoucherIssue}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Channel_Name__c</parameterName>
+                    <value>{!TransactionJournal.Channel}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Channel</parameterName>
+                    <value>{!TransactionJournal.Channel}</value>
+                </actionParameters>
+                <actionType>RunProgramProcess</actionType>
+                <loyaltyProgramProcess>Rewards Redemption Process</loyaltyProgramProcess>
+            </actions>
+            <conditions>
+                <conditionCriteria>(1 OR 2 ) AND 3 AND 4</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>Equals</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>NULL</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>Equals</operator>
+                    <sequence>2</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>Equals</operator>
+                    <sequence>3</sequence>
+                    <sourceFieldName>TransactionJournal.Order_Item_ID__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>Equals</operator>
+                    <sequence>4</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionName>IF Transaction Amount NOT NULL</conditionName>
+                <conditionType>ConditionGroup</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>GreaterThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>And Amount &gt; 0</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>LessThan</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.TransactionAmount</sourceFieldName>
+                    <value>0</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>And Amount &lt; 0</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>GreaterThanOrEquals</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
+                    <value>VoucherTargetPoints</value>
+                    <valueType>Parameter</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <previousRule>Bulk Voucher Upload</previousRule>
+            <ruleName>Set Up Step</ruleName>
+            <startDate>2024-03-01</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>IF Transaction Amount NOT NULL</associatedStep>
+                <sequence>3</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>And Amount &gt; 0</associatedStep>
+                <parentStep>IF Transaction Amount NOT NULL</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>And Amount &lt; 0</associatedStep>
+                <parentStep>IF Transaction Amount NOT NULL</parentStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</associatedStep>
+                <sequence>5</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Retrieve Points for Adjustment from Ledgers</associatedStep>
+                <parentStep>IF Transaction Amount = zero/null AND OrderItemID = Blank AND VoucherDef = Blank</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>GET Runtime VoucherDefinition Values</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Credit Adjustment Points</associatedStep>
+                <parentStep>And Amount &gt; 0</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Debit Adjustment Points</associatedStep>
+                <parentStep>And Amount &lt; 0</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>GET Positive Balance Currency [After Adjustment ]</associatedStep>
+                <sequence>4</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Assign Values for Vouchers Issuance</associatedStep>
+                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Generate OrderID Code</associatedStep>
+                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Journal OrderId field</associatedStep>
+                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
+                <sequence>3</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Publish PE to Issue Actual Vouchers</associatedStep>
+                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
+                <sequence>4</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Run Debit Points and Journals for Voucher Issuance</associatedStep>
+                <parentStep>IF Positive Balance Currency is POSITIVE and Greater than Voucher Target Points</parentStep>
+                <sequence>5</sequence>
+            </stepMappings>
+        </rules>
+        <rules>
+            <actions>
+                <actionName>GET Positive Balance Currency</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>ProgramCurrencyName</parameterName>
+                    <value>Positive Balance</value>
+                    <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>PointsBalance</parameterName>
+                    <value>PositiveBalanceCurrency</value>
+                </actionParameters>
+                <actionType>GetMemberPointBalance</actionType>
+            </actions>
+            <actions>
+                <actionName>Update Status Points</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>LoyaltyProgramMember</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!TransactionJournal.MemberId}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Status_Points__c</parameterName>
+                    <value>{!PositiveBalanceCurrency}</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>LoyaltyProgramMember</entityApiName>
+            </actions>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <previousRule>Set Up Step</previousRule>
+            <ruleName>Finalize</ruleName>
+            <startDate>2024-03-01</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>GET Positive Balance Currency</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Status Points</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+        </rules>
+        <rules>
+            <actions>
+                <actionName>Issue Voucher by Definition Name</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>VoucherDefinitionName</parameterName>
+                    <value>{!VoucherDefinitionName}</value>
+                    <valueType>Parameter</valueType>
+                </actionParameters>
+                <actionType>IssueVoucher</actionType>
+            </actions>
+            <actions>
+                <actionName>Update Journal VoucherDefinition to TBD</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>TransactionJournal</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!TransactionJournal.Id}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Voucher_Definition_Name__c</parameterName>
+                    <value>&quot;TBD&quot;</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>TransactionJournal</entityApiName>
+            </actions>
+            <actions>
+                <actionName>Update Journal VoucherDefinition to TBD for deletion</actionName>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_action</parameterName>
+                    <value>update</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>_entity</parameterName>
+                    <value>TransactionJournal</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Id</parameterName>
+                    <value>{!TransactionJournal.Id}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Voucher_Definition_Name__c</parameterName>
+                    <value>&quot;TBD&quot;</value>
+                </actionParameters>
+                <actionType>Crud</actionType>
+                <crudActionType>update</crudActionType>
+                <entityApiName>TransactionJournal</entityApiName>
+            </actions>
+            <conditions>
+                <conditionCriteria>1 AND 2 AND 3</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>&apos;&apos;</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>2</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>NULL</value>
+                    <valueType>Formula</valueType>
+                </conditionFilterCriteria>
+                <conditionFilterCriteria>
+                    <operator>NotEquals</operator>
+                    <sequence>3</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>NonAdHoc</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF VoucherDefinitonName is NOT BLANK and Not Equal &apos;NonAdHoc&apos;</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <conditions>
+                <conditionCriteria>1</conditionCriteria>
+                <conditionFilterCriteria>
+                    <operator>Equals</operator>
+                    <sequence>1</sequence>
+                    <sourceFieldName>TransactionJournal.Voucher_Definition_Name__c</sourceFieldName>
+                    <value>NonAdHoc</value>
+                    <valueType>Literal</valueType>
+                </conditionFilterCriteria>
+                <conditionName>IF VoucherDefinitonName is NOT BLANK and EQUAL &apos;NonAdHoc&apos;</conditionName>
+                <conditionType>Condition</conditionType>
+            </conditions>
+            <isProcessEligibilityRule>false</isProcessEligibilityRule>
+            <ruleName>Bulk Voucher Upload</ruleName>
+            <startDate>2024-03-01</startDate>
+            <status>Active</status>
+            <stepMappings>
+                <associatedStep>IF VoucherDefinitonName is NOT BLANK and Not Equal &apos;NonAdHoc&apos;</associatedStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>IF VoucherDefinitonName is NOT BLANK and EQUAL &apos;NonAdHoc&apos;</associatedStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Issue Voucher by Definition Name</associatedStep>
+                <parentStep>IF VoucherDefinitonName is NOT BLANK and Not Equal &apos;NonAdHoc&apos;</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Journal VoucherDefinition to TBD</associatedStep>
+                <parentStep>IF VoucherDefinitonName is NOT BLANK and Not Equal &apos;NonAdHoc&apos;</parentStep>
+                <sequence>2</sequence>
+            </stepMappings>
+            <stepMappings>
+                <associatedStep>Update Journal VoucherDefinition to TBD for deletion</associatedStep>
+                <parentStep>IF VoucherDefinitonName is NOT BLANK and EQUAL &apos;NonAdHoc&apos;</parentStep>
+                <sequence>1</sequence>
+            </stepMappings>
+        </rules>
+        <status>Active</status>
+    </programProcesses>
+    <programProcesses>
+        <executionType>RealTime</executionType>
+        <journalSubType>Reversal</journalSubType>
+        <journalType>Accrual</journalType>
         <parameters>
             <dataType>Numeric</dataType>
             <decimalPlaces>0</decimalPlaces>
@@ -1803,11 +2472,11 @@
         <parameters>
             <dataType>Numeric</dataType>
             <decimalPlaces>0</decimalPlaces>
-            <description>Parameter to store total amount to reverse (i.e. storing value of pointToReverse)</description>
+            <description>Parameter to store total amount of original order ; in order to compare whether full or partial refund</description>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>TotalAmtToReverse</parameterName>
+            <parameterName>TotalOriginalOrderAmt</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1951,7 +2620,7 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>OrderIdItemChannelKey</parameterName>
+            <parameterName>OriginalOrderIdOuput</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -1959,7 +2628,88 @@
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>OriginalOrderIdOuput</parameterName>
+            <parameterName>ConcatenatedPointsCreditedOutput</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>OrderIdItemChannelKey</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Boolean</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>JournalsNotFound</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>ConcatenatedreturnChannelValue</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>returnPerOrderTotalAmountKey</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Numeric</dataType>
+            <decimalPlaces>0</decimalPlaces>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>perOrderReturnAmount</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>ConcatenatedTotalReturnAmount</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>ConcatenatedOriginalOrderAmount</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>OriginalOrderAmountKey</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>returnPerOrderChannel</parameterName>
+            <parameterType>Variable</parameterType>
+        </parameters>
+        <parameters>
+            <dataType>Text</dataType>
+            <isCollection>false</isCollection>
+            <isInput>false</isInput>
+            <isOutput>false</isOutput>
+            <parameterName>returnPerOrderChannelKey</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <processName>Reversal for Return Process</processName>
@@ -2435,11 +3185,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionName>Publish Event to Reverse Redeemed Voucher Status to Issued</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>OriginalChannel</parameterName>
-                    <value>{!TransactionJournal.Original_Channel__c}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
                     <parameterName>MemberId</parameterName>
                     <value>{!TransactionJournal.MemberId}</value>
                 </actionParameters>
@@ -2447,6 +3192,11 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <operator>Equals</operator>
                     <parameterName>OriginalOrderId</parameterName>
                     <value>{!TransactionJournal.Original_Order_ID__c}</value>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>OriginalChannel</parameterName>
+                    <value>{!TransactionJournal.Original_Channel__c}</value>
                 </actionParameters>
                 <actionType>RunFlow</actionType>
                 <flowDefinition>Publish_Event_for_Reversal_of_Redeemed_Vouchers</flowDefinition>
@@ -2926,433 +3676,10 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
         <status>Active</status>
     </programProcesses>
     <programProcesses>
-        <description>Handle rewards redemption by debiting points</description>
-        <executionType>RealTime</executionType>
-        <journalSubType>Reward</journalSubType>
-        <journalType>Redemption</journalType>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>Store to current Positive Balance engagement attribute</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EA_PositiveBalanceTracking</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>2</decimalPlaces>
-            <description>Face value of reward vouchers being issued</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherFaceValue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>Target points to issue reward vouchers</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherTargetPoints</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>This is the loyalty member ID to process the journal</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MemberID</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.MemberId}</value>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Loyalty Program Name</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>ProgramName</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Voucher Definition Name being used to issue reward vouchers</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>VoucherRewardDefinition</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>Store the current Positive Balance Currency</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PositiveBalanceCurrency</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>This is the per-calculated points to deduct. from the currency. Since each accrual journal will attempt to deduct points we need to divide the points to deduct based on # of accrual items being processed.</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>TotalPointsToDebit</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TotalVouchersToIssue} * {!VoucherTargetPoints}</value>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>Store total number of accrual items being processed so far</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EA_AccrualItemTracking</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>Total # of vouchers to issue</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>TotalVouchersToIssue</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.Voucher_Count__c}</value>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>NOT BEING USED</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EA_RedemptionTracking</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Loyalty Program ID</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>ProgramID</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.LoyaltyProgram.Id}</value>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Order ID associated with this Redemption</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>OrderID</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.Order_ID__c}</value>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Set Event Type = Redemption</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EventType</parameterName>
-            <parameterType>Constant</parameterType>
-            <value>Redemption</value>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Order Item ID associated with this Redemption</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>OrderItemID</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.Order_Item_ID__c}</value>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Channel associated with the Order ID. Must use channel name formula field</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>Channel</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!TransactionJournal.Channel_Name__c}</value>
-        </parameters>
-        <processName>Rewards Redemption Process</processName>
-        <processType>TransactionJournal</processType>
-        <rules>
-            <actions>
-                <actionName>Run Flow - Get Runtime Configuration</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherRewardDefinitionName</parameterName>
-                    <value>VoucherRewardDefinition</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherRewardTargetPoints</parameterName>
-                    <value>VoucherTargetPoints</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>LoyaltyProgramName</parameterName>
-                    <value>ProgramName</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>VoucherRewardFaceValue</parameterName>
-                    <value>VoucherFaceValue</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Get_Runtime_Configuration</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>Get PositiveBalanceCurrency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>PositiveBalanceCurrency</value>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Run Flow - Debug</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message5</parameterName>
-                    <value>TEXT( {!EA_AccrualItemTracking}  )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message3</parameterName>
-                    <value>TEXT( {!EA_PositiveBalanceTracking} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message2</parameterName>
-                    <value>TEXT( {!PositiveBalanceCurrency} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message1</parameterName>
-                    <value>TEXT( {!TotalPointsToDebit} )</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Message4</parameterName>
-                    <value>{!TransactionJournal.Channel_Name__c}</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Debug_Process</flowDefinition>
-            </actions>
-            <actions>
-                <actionName>Debit Positive Balance Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsToDebit</parameterName>
-                    <value>{!TotalPointsToDebit}</value>
-                </actionParameters>
-                <actionType>DebitPoints</actionType>
-            </actions>
-            <actions>
-                <actionName>GET Positive Balance Currency</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramCurrencyName</parameterName>
-                    <value>Positive Balance</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>PointsBalance</parameterName>
-                    <value>PositiveBalanceCurrency</value>
-                </actionParameters>
-                <actionType>GetMemberPointBalance</actionType>
-            </actions>
-            <actions>
-                <actionName>Update Member - Status Points</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>LoyaltyProgramMember</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!MemberID}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Status_Points__c</parameterName>
-                    <value>{!PositiveBalanceCurrency}</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>LoyaltyProgramMember</entityApiName>
-            </actions>
-            <actions>
-                <actionName>Overwrite RewardTracking EA with Current Positive Balance</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EngagementAttributeName</parameterName>
-                    <value>Rewards Tracking</value>
-                    <valueType>Literal</valueType>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>UpdateType</parameterName>
-                    <value>OverwriteCurrentValue</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>{!PositiveBalanceCurrency}</value>
-                </actionParameters>
-                <actionType>UpdateCurrentValueForMemberAttribute</actionType>
-            </actions>
-            <actions>
-                <actionName>Run Flow - Handle Redemption Journal</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EventType</parameterName>
-                    <value>{!EventType}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Channel</parameterName>
-                    <value>{!TransactionJournal.Channel_Name__c}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>TotalPointsToDebit</parameterName>
-                    <value>{!TotalPointsToDebit}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>TotalRewards</parameterName>
-                    <value>{!TotalPointsToDebit}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>OrderID</parameterName>
-                    <value>{!OrderID}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>ProgramID</parameterName>
-                    <value>{!ProgramID}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>OrderItemID</parameterName>
-                    <value>{!OrderItemID}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MemberID</parameterName>
-                    <value>{!MemberID}</value>
-                </actionParameters>
-                <actionType>RunFlow</actionType>
-                <flowDefinition>Loyalty_Process_Process_Rewards</flowDefinition>
-            </actions>
-            <conditions>
-                <conditionCriteria>1</conditionCriteria>
-                <conditionFilterCriteria>
-                    <operator>GreaterThan</operator>
-                    <sequence>1</sequence>
-                    <sourceFieldName>PositiveBalanceCurrency</sourceFieldName>
-                    <value>0</value>
-                    <valueType>Literal</valueType>
-                </conditionFilterCriteria>
-                <conditionName>If Positive Balance &gt; 0</conditionName>
-                <conditionType>Condition</conditionType>
-            </conditions>
-            <isProcessEligibilityRule>false</isProcessEligibilityRule>
-            <ruleName>Base Rule</ruleName>
-            <startDate>2024-04-01</startDate>
-            <status>Active</status>
-            <stepMappings>
-                <associatedStep>If Positive Balance &gt; 0</associatedStep>
-                <sequence>7</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Run Flow - Get Runtime Configuration</associatedStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Get PositiveBalanceCurrency</associatedStep>
-                <sequence>2</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Run Flow - Debug</associatedStep>
-                <sequence>3</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Debit Positive Balance Currency</associatedStep>
-                <sequence>4</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>GET Positive Balance Currency</associatedStep>
-                <sequence>5</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Member - Status Points</associatedStep>
-                <sequence>6</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Overwrite RewardTracking EA with Current Positive Balance</associatedStep>
-                <parentStep>If Positive Balance &gt; 0</parentStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Run Flow - Handle Redemption Journal</associatedStep>
-                <sequence>8</sequence>
-            </stepMappings>
-        </rules>
-        <status>Active</status>
-    </programProcesses>
-    <programProcesses>
         <description>Latest Version 6 - Only of Accrual process</description>
         <executionType>RealTime</executionType>
         <journalSubType>Purchase</journalSubType>
         <journalType>Accrual</journalType>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MemberIdTBD</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
         <parameters>
             <dataType>Numeric</dataType>
             <decimalPlaces>0</decimalPlaces>
@@ -3404,34 +3731,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
-            <parameterName>NewPointsBalance</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>OldPointsBalance</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>NewPointsToUpdateOnMemberLevel</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!OldPointsBalance}</value>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
             <parameterName>BrandMultiplier</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
@@ -3466,42 +3765,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <value>CEILING({!DT_Outcome.Multiplier__c} *{!BasePointsEarned})</value>
         </parameters>
         <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>updatedBalance</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PreviousPointBalanceOfMember</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>NewCreditedPointsToMembers</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>currentMemberAttributeValue</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
             <dataType>Text</dataType>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
@@ -3519,24 +3782,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>XCurrentPointBalance</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>NewUpdatedBalanceAfterCreditedPoints</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
             <dataType>Date</dataType>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
@@ -3546,29 +3791,11 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <value>TODAY()</value>
         </parameters>
         <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>LatestValueInAttribute</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
             <dataType>Boolean</dataType>
             <isCollection>false</isCollection>
             <isInput>false</isInput>
             <isOutput>false</isOutput>
             <parameterName>IsTargetMet</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PLACEHOLDER1</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -3586,14 +3813,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <isInput>false</isInput>
             <isOutput>false</isOutput>
             <parameterName>TransactionJournalActivityDate</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>PLACEHOLDER2</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -3744,17 +3963,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <isOutput>false</isOutput>
             <parameterName>LineItemTotalVoucherFaceValue</parameterName>
             <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>{!PointsForPurchase} + {!EA_RemainderRewardsBalance}</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>SUMPurchaseRemainderPoints</parameterName>
-            <parameterType>Formula</parameterType>
-            <value>{!PointsForPurchase} + {!EA_RemainderRewardsBalance}</value>
         </parameters>
         <parameters>
             <dataType>Text</dataType>
@@ -3914,16 +4122,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             <isInput>false</isInput>
             <isOutput>false</isOutput>
             <parameterName>EA_NegativeBalanceApportionment</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Numeric</dataType>
-            <decimalPlaces>0</decimalPlaces>
-            <description>the max amount to reduce negative balance by a lineitem</description>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MaxNegativeBalanceDecreaseApportionment</parameterName>
             <parameterType>Variable</parameterType>
         </parameters>
         <parameters>
@@ -4841,11 +5039,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                 <actionName>RESET RedeemVoucherFaceValueTracking</actionName>
                 <actionParameters>
                     <operator>Equals</operator>
-                    <parameterName>Value</parameterName>
-                    <value>0</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
                     <parameterName>UpdateType</parameterName>
                     <value>OverwriteCurrentValue</value>
                 </actionParameters>
@@ -4854,6 +5047,11 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
                     <parameterName>EngagementAttributeName</parameterName>
                     <value>Redeem Voucher FaceValueTracking</value>
                     <valueType>Literal</valueType>
+                </actionParameters>
+                <actionParameters>
+                    <operator>Equals</operator>
+                    <parameterName>Value</parameterName>
+                    <value>0</value>
                 </actionParameters>
                 <actionType>UpdateCurrentValueForMemberAttribute</actionType>
             </actions>
@@ -5293,297 +5491,6 @@ TEXT(FIND({!returnPerOrderChannelKey}  , {!ConcatenatedreturnChannelValue} ) + L
             </stepMappings>
             <stepMappings>
                 <associatedStep>Update Member - Status Points</associatedStep>
-                <sequence>2</sequence>
-            </stepMappings>
-        </rules>
-        <status>Active</status>
-    </programProcesses>
-    <programProcesses>
-        <description>Updates member details such as first name, last name, email ID, and mobile phone number.</description>
-        <executionType>RealTime</executionType>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>The membership number of the loyalty program member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MembershipNumber</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>The identifier of the loyalty program member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>true</isOutput>
-            <parameterName>MemberId</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Name of the channel used for enrolling in the loyalty program.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EnrollmentChannel</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Date</dataType>
-            <description>Date on which the member enrolled in the loyalty program.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>EnrollmentDate</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Identifier of the contact that&apos;s associated with the loyalty program member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>true</isOutput>
-            <parameterName>ContactId</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Surname or the family name of the member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>LastName</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>A given name of the member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>FirstName</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Mobile phone number of the member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MobilePhone</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Email address of the member.</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>Email</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <isCollection>false</isCollection>
-            <isInput>false</isInput>
-            <isOutput>true</isOutput>
-            <parameterName>TransactionJournalId</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Update country field on Loyalty Member record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>Country</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Update State field on Loyalty Member record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>State</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Date</dataType>
-            <description>Update Birthdate on Person Account record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>Birthdate</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Boolean</dataType>
-            <description>Update Staff field on Loyalty Member record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>Staff</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Update Apple Wallet Link field on Loyalty Member record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>AppleWalletLink</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Update Google Wallet Link field on Loyalty Member record</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>GoogleWalletLink</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <parameters>
-            <dataType>Text</dataType>
-            <description>Update Member Status field to re-enrol Loyalty Member</description>
-            <isCollection>false</isCollection>
-            <isInput>true</isInput>
-            <isOutput>false</isOutput>
-            <parameterName>MemberStatus</parameterName>
-            <parameterType>Variable</parameterType>
-        </parameters>
-        <processName>UpdateMemberDetails</processName>
-        <processType>UpdateMemberDetails</processType>
-        <rules>
-            <actions>
-                <actionName>Update Member Record</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>LoyaltyProgramMember</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!MemberId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>State__c</parameterName>
-                    <value>{!State}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EnrollmentChannel</parameterName>
-                    <value>{!EnrollmentChannel}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Google_Wallet_Link__c</parameterName>
-                    <value>{!GoogleWalletLink}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MembershipNumber</parameterName>
-                    <value>{!MembershipNumber}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>EnrollmentDate</parameterName>
-                    <value>{!EnrollmentDate}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Country__c</parameterName>
-                    <value>{!Country}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Staff__c</parameterName>
-                    <value>{!Staff}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Apple_Wallet_Link__c</parameterName>
-                    <value>{!AppleWalletLink}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_outputId</parameterName>
-                    <value>MemberId</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>LoyaltyProgramMember</entityApiName>
-            </actions>
-            <actions>
-                <actionName>Update Member&apos;s Contact Record</actionName>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_action</parameterName>
-                    <value>update</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_entity</parameterName>
-                    <value>Contact</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Id</parameterName>
-                    <value>{!ContactId}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Email</parameterName>
-                    <value>{!Email}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>MobilePhone</parameterName>
-                    <value>{!MobilePhone}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>LastName</parameterName>
-                    <value>{!LastName}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>FirstName</parameterName>
-                    <value>{!FirstName}</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>_outputId</parameterName>
-                    <value>ContactId</value>
-                </actionParameters>
-                <actionParameters>
-                    <operator>Equals</operator>
-                    <parameterName>Birthdate</parameterName>
-                    <value>{!Birthdate}</value>
-                </actionParameters>
-                <actionType>Crud</actionType>
-                <crudActionType>update</crudActionType>
-                <entityApiName>Contact</entityApiName>
-            </actions>
-            <description>Modifies the member record and the associated contact record.</description>
-            <isProcessEligibilityRule>false</isProcessEligibilityRule>
-            <ruleName>Update Member Details</ruleName>
-            <startDate>2024-03-14</startDate>
-            <status>Active</status>
-            <stepMappings>
-                <associatedStep>Update Member Record</associatedStep>
-                <sequence>1</sequence>
-            </stepMappings>
-            <stepMappings>
-                <associatedStep>Update Member&apos;s Contact Record</associatedStep>
                 <sequence>2</sequence>
             </stepMappings>
         </rules>

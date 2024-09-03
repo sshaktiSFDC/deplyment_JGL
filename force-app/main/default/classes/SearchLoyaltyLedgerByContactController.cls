@@ -38,7 +38,7 @@ public with sharing class SearchLoyaltyLedgerByContactController {
         try {
 
             String loyaltyLedgerQuey = 'SELECT Id, Points, EventType, ';
-            loyaltyLedgerQuey += 'TransactionJournal.Name, TransactionJournal.ActivityDate, TransactionJournal.TransactionLocation, TransactionJournal.JournalType.Name, TransactionJournal.JournalSubType.Name, TransactionJournal.Order_ID__c, TransactionJournal.Order_Item_ID__c, TransactionJournal.Product.Description, TransactionJournal.Quantity, TransactionJournal.TransactionAmount';
+            loyaltyLedgerQuey += 'TransactionJournal.Name, TransactionJournal.Brand, TransactionJournal.ActivityDate, TransactionJournal.TransactionLocation, TransactionJournal.JournalType.Name, TransactionJournal.JournalSubType.Name, TransactionJournal.Order_ID__c, TransactionJournal.Order_Item_ID__c, TransactionJournal.Product.Description, TransactionJournal.Quantity, TransactionJournal.TransactionAmount';
             loyaltyLedgerQuey += ' FROM LoyaltyLedger WHERE LoyaltyProgramMember.ContactId = :contactId';
 
             if (!String.isBlank(orderNumber) && !String.isEmpty(orderNumber)) {

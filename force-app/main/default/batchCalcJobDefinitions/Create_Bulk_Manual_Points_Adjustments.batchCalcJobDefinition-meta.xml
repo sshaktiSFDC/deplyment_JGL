@@ -22,39 +22,21 @@
         </fields>
         <label>CSVupload</label>
         <name>CSVupload</name>
-        <sourceName>Test_Bulk_Upload_2_Vouchers</sourceName>
+        <sourceName>DPE_sample_data_Vouchers</sourceName>
         <type>Analytics</type>
     </datasources>
     <datasources>
         <fields>
-            <alias>Id</alias>
+            <alias>ProgramId</alias>
             <dataType>Text</dataType>
             <isPrimaryKey>false</isPrimaryKey>
-            <name>Id</name>
+            <name>ProgramId</name>
         </fields>
-        <fields>
-            <alias>Name</alias>
-            <dataType>Text</dataType>
-            <isPrimaryKey>false</isPrimaryKey>
-            <name>Name</name>
-        </fields>
-        <label>JournalType</label>
-        <name>JournalType</name>
-        <sourceName>JournalType</sourceName>
-        <type>StandardObject</type>
-    </datasources>
-    <datasources>
         <fields>
             <alias>Id</alias>
             <dataType>Text</dataType>
             <isPrimaryKey>false</isPrimaryKey>
             <name>Id</name>
-        </fields>
-        <fields>
-            <alias>MembershipNumber</alias>
-            <dataType>Text</dataType>
-            <isPrimaryKey>false</isPrimaryKey>
-            <name>MembershipNumber</name>
         </fields>
         <fields>
             <alias>MemberStatus</alias>
@@ -63,14 +45,51 @@
             <name>MemberStatus</name>
         </fields>
         <fields>
-            <alias>ProgramId</alias>
+            <alias>MembershipNumber</alias>
             <dataType>Text</dataType>
             <isPrimaryKey>false</isPrimaryKey>
-            <name>ProgramId</name>
+            <name>MembershipNumber</name>
         </fields>
         <label>LoyaltyProgramMember</label>
         <name>LoyaltyProgramMember</name>
         <sourceName>LoyaltyProgramMember</sourceName>
+        <type>StandardObject</type>
+    </datasources>
+    <datasources>
+        <fields>
+            <alias>Name</alias>
+            <dataType>Text</dataType>
+            <isPrimaryKey>false</isPrimaryKey>
+            <name>Name</name>
+        </fields>
+        <fields>
+            <alias>Id</alias>
+            <dataType>Text</dataType>
+            <isPrimaryKey>false</isPrimaryKey>
+            <name>Id</name>
+        </fields>
+        <label>JournalType</label>
+        <name>JournalType</name>
+        <sourceName>JournalType</sourceName>
+        <type>StandardObject</type>
+    </datasources>
+    <datasources>
+        <description>retrieve voucher definitions</description>
+        <fields>
+            <alias>Category_c</alias>
+            <dataType>Text</dataType>
+            <isPrimaryKey>false</isPrimaryKey>
+            <name>Category__c</name>
+        </fields>
+        <fields>
+            <alias>Name</alias>
+            <dataType>Text</dataType>
+            <isPrimaryKey>false</isPrimaryKey>
+            <name>Name</name>
+        </fields>
+        <label>VoucherDefinitions</label>
+        <name>VoucherDefinitions</name>
+        <sourceName>VoucherDefinition</sourceName>
         <type>StandardObject</type>
     </datasources>
     <executionPlatformType>CRMA</executionPlatformType>
@@ -90,13 +109,59 @@
     <isTemplate>false</isTemplate>
     <joins>
         <fields>
-            <alias>AcvitityDate</alias>
-            <sourceFieldName>AcvitityDate</sourceFieldName>
-            <sourceName>AddFields</sourceName>
+            <alias>Category_c</alias>
+            <sourceFieldName>Category_c</sourceFieldName>
+            <sourceName>byVoucherDefName</sourceName>
         </fields>
         <fields>
-            <alias>Channel</alias>
-            <sourceFieldName>Channel</sourceFieldName>
+            <alias>MemberId</alias>
+            <sourceFieldName>Id</sourceFieldName>
+            <sourceName>LoyaltyProgramMember</sourceName>
+        </fields>
+        <fields>
+            <alias>MembershipNumber</alias>
+            <sourceFieldName>MembershipNumber</sourceFieldName>
+            <sourceName>LoyaltyProgramMember</sourceName>
+        </fields>
+        <fields>
+            <alias>Membership_Number</alias>
+            <sourceFieldName>Membership_Number</sourceFieldName>
+            <sourceName>byVoucherDefName</sourceName>
+        </fields>
+        <fields>
+            <alias>MemberStatus</alias>
+            <sourceFieldName>MemberStatus</sourceFieldName>
+            <sourceName>LoyaltyProgramMember</sourceName>
+        </fields>
+        <fields>
+            <alias>Points</alias>
+            <sourceFieldName>Points</sourceFieldName>
+            <sourceName>byVoucherDefName</sourceName>
+        </fields>
+        <fields>
+            <alias>ProgramId</alias>
+            <sourceFieldName>ProgramId</sourceFieldName>
+            <sourceName>LoyaltyProgramMember</sourceName>
+        </fields>
+        <fields>
+            <alias>VoucherDefinitionName</alias>
+            <sourceFieldName>VoucherDefinitionName</sourceFieldName>
+            <sourceName>byVoucherDefName</sourceName>
+        </fields>
+        <joinKeys>
+            <primarySourceFieldName>Membership_Number</primarySourceFieldName>
+            <secondarySourceFieldName>MembershipNumber</secondarySourceFieldName>
+        </joinKeys>
+        <label>ProgramMemberJoin</label>
+        <name>ProgramMemberJoin</name>
+        <primarySourceName>byVoucherDefName</primarySourceName>
+        <secondarySourceName>LoyaltyProgramMember</secondarySourceName>
+        <type>Inner</type>
+    </joins>
+    <joins>
+        <fields>
+            <alias>AcvitityDate</alias>
+            <sourceFieldName>AcvitityDate</sourceFieldName>
             <sourceName>AddFields</sourceName>
         </fields>
         <fields>
@@ -105,43 +170,13 @@
             <sourceName>AddFields</sourceName>
         </fields>
         <fields>
-            <alias>JournalTypeId</alias>
-            <sourceFieldName>Id</sourceFieldName>
-            <sourceName>FilterJournalType</sourceName>
-        </fields>
-        <fields>
             <alias>JournalTypeName</alias>
             <sourceFieldName>JournalTypeName</sourceFieldName>
             <sourceName>AddFields</sourceName>
         </fields>
         <fields>
-            <alias>MemberId</alias>
-            <sourceFieldName>MemberId</sourceFieldName>
-            <sourceName>AddFields</sourceName>
-        </fields>
-        <fields>
-            <alias>MembershipNumber</alias>
-            <sourceFieldName>MembershipNumber</sourceFieldName>
-            <sourceName>AddFields</sourceName>
-        </fields>
-        <fields>
-            <alias>Membership_Number</alias>
-            <sourceFieldName>Membership_Number</sourceFieldName>
-            <sourceName>AddFields</sourceName>
-        </fields>
-        <fields>
             <alias>MemberStatus</alias>
             <sourceFieldName>MemberStatus</sourceFieldName>
-            <sourceName>AddFields</sourceName>
-        </fields>
-        <fields>
-            <alias>Name</alias>
-            <sourceFieldName>Name</sourceFieldName>
-            <sourceName>FilterJournalType</sourceName>
-        </fields>
-        <fields>
-            <alias>Points</alias>
-            <sourceFieldName>Points</sourceFieldName>
             <sourceName>AddFields</sourceName>
         </fields>
         <fields>
@@ -155,8 +190,43 @@
             <sourceName>AddFields</sourceName>
         </fields>
         <fields>
-            <alias>VoucherDefinitionName</alias>
-            <sourceFieldName>VoucherDefinitionName</sourceFieldName>
+            <alias>Name</alias>
+            <sourceFieldName>Name</sourceFieldName>
+            <sourceName>FilterJournalType</sourceName>
+        </fields>
+        <fields>
+            <alias>Points</alias>
+            <sourceFieldName>Points</sourceFieldName>
+            <sourceName>AddFields</sourceName>
+        </fields>
+        <fields>
+            <alias>Channel</alias>
+            <sourceFieldName>Channel</sourceFieldName>
+            <sourceName>AddFields</sourceName>
+        </fields>
+        <fields>
+            <alias>MemberId</alias>
+            <sourceFieldName>MemberId</sourceFieldName>
+            <sourceName>AddFields</sourceName>
+        </fields>
+        <fields>
+            <alias>JournalTypeId</alias>
+            <sourceFieldName>Id</sourceFieldName>
+            <sourceName>FilterJournalType</sourceName>
+        </fields>
+        <fields>
+            <alias>MembershipNumber</alias>
+            <sourceFieldName>MembershipNumber</sourceFieldName>
+            <sourceName>AddFields</sourceName>
+        </fields>
+        <fields>
+            <alias>Membership_Number</alias>
+            <sourceFieldName>Membership_Number</sourceFieldName>
+            <sourceName>AddFields</sourceName>
+        </fields>
+        <fields>
+            <alias>VoucherDefinitionNameChecked</alias>
+            <sourceFieldName>VoucherDefinitionNameChecked</sourceFieldName>
             <sourceName>AddFields</sourceName>
         </fields>
         <joinKeys>
@@ -171,14 +241,9 @@
     </joins>
     <joins>
         <fields>
-            <alias>MemberId</alias>
-            <sourceFieldName>Id</sourceFieldName>
-            <sourceName>LoyaltyProgramMember</sourceName>
-        </fields>
-        <fields>
-            <alias>MembershipNumber</alias>
-            <sourceFieldName>MembershipNumber</sourceFieldName>
-            <sourceName>LoyaltyProgramMember</sourceName>
+            <alias>Category_c</alias>
+            <sourceFieldName>Category_c</sourceFieldName>
+            <sourceName>VoucherDefinitions</sourceName>
         </fields>
         <fields>
             <alias>Membership_Number</alias>
@@ -186,9 +251,9 @@
             <sourceName>CSVupload</sourceName>
         </fields>
         <fields>
-            <alias>MemberStatus</alias>
-            <sourceFieldName>MemberStatus</sourceFieldName>
-            <sourceName>LoyaltyProgramMember</sourceName>
+            <alias>Name</alias>
+            <sourceFieldName>Name</sourceFieldName>
+            <sourceName>VoucherDefinitions</sourceName>
         </fields>
         <fields>
             <alias>Points</alias>
@@ -196,44 +261,29 @@
             <sourceName>CSVupload</sourceName>
         </fields>
         <fields>
-            <alias>ProgramId</alias>
-            <sourceFieldName>ProgramId</sourceFieldName>
-            <sourceName>LoyaltyProgramMember</sourceName>
-        </fields>
-        <fields>
             <alias>VoucherDefinitionName</alias>
             <sourceFieldName>VoucherDefinitionName</sourceFieldName>
             <sourceName>CSVupload</sourceName>
         </fields>
         <joinKeys>
-            <primarySourceFieldName>Membership_Number</primarySourceFieldName>
-            <secondarySourceFieldName>MembershipNumber</secondarySourceFieldName>
+            <primarySourceFieldName>VoucherDefinitionName</primarySourceFieldName>
+            <secondarySourceFieldName>Name</secondarySourceFieldName>
         </joinKeys>
-        <label>ProgramMemberJoin</label>
-        <name>ProgramMemberJoin</name>
+        <label>byVoucherDefName</label>
+        <name>byVoucherDefName</name>
         <primarySourceName>CSVupload</primarySourceName>
-        <secondarySourceName>LoyaltyProgramMember</secondarySourceName>
-        <type>Inner</type>
+        <secondarySourceName>VoucherDefinitions</secondarySourceName>
+        <type>LeftOuter</type>
     </joins>
     <label>Create Bulk Manual Points Adjustments</label>
     <processType>Loyalty</processType>
     <status>Active</status>
     <transforms>
         <expressionFields>
-            <alias>AcvitityDate</alias>
-            <dataType>DateTime</dataType>
-            <expression>NOW()</expression>
-        </expressionFields>
-        <expressionFields>
-            <alias>Channel</alias>
+            <alias>Status</alias>
             <dataType>Text</dataType>
-            <expression>SUBSTITUTE({MemberStatus}  , &quot;Active&quot;, &quot;Web&quot; )</expression>
+            <expression>SUBSTITUTE({MemberStatus}  , &quot;Active&quot;, &quot;Processed&quot; )</expression>
             <length>18</length>
-        </expressionFields>
-        <expressionFields>
-            <alias>JournalDate</alias>
-            <dataType>DateTime</dataType>
-            <expression>NOW()</expression>
         </expressionFields>
         <expressionFields>
             <alias>JournalTypeName</alias>
@@ -242,10 +292,27 @@
             <length>255</length>
         </expressionFields>
         <expressionFields>
-            <alias>Status</alias>
+            <alias>AcvitityDate</alias>
+            <dataType>DateTime</dataType>
+            <expression>NOW()</expression>
+        </expressionFields>
+        <expressionFields>
+            <alias>JournalDate</alias>
+            <dataType>DateTime</dataType>
+            <expression>NOW()</expression>
+        </expressionFields>
+        <expressionFields>
+            <alias>Channel</alias>
             <dataType>Text</dataType>
-            <expression>SUBSTITUTE({MemberStatus}  , &quot;Active&quot;, &quot;Processed&quot; )</expression>
+            <expression>SUBSTITUTE({MemberStatus}    , &quot;Active&quot;, &quot;Web&quot; )</expression>
             <length>18</length>
+        </expressionFields>
+        <expressionFields>
+            <alias>VoucherDefinitionNameChecked</alias>
+            <dataType>Text</dataType>
+            <expression>IF( ISBLANK({VoucherDefinitionName}) == false &amp;&amp;
+CONTAINS({Category_c} , &quot;Ad-Hoc&quot;) , {VoucherDefinitionName} ,  &quot;NonAdHoc&quot; )</expression>
+            <length>255</length>
         </expressionFields>
         <label>AddFields</label>
         <name>AddFields</name>
@@ -295,7 +362,7 @@
         </fields>
         <fields>
             <runtimeParameter>false</runtimeParameter>
-            <sourceFieldName>VoucherDefinitionName</sourceFieldName>
+            <sourceFieldName>VoucherDefinitionNameChecked</sourceFieldName>
             <targetFieldName>Voucher_Definition_Name__c</targetFieldName>
         </fields>
         <isChangedRow>false</isChangedRow>

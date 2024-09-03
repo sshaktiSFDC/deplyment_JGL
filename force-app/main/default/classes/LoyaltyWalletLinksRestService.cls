@@ -16,21 +16,24 @@ global with sharing class LoyaltyWalletLinksRestService {
             RestResponse response = RestContext.response;
             
             String[] urls = request.requestURI.split('/');
-            System.debug(request.params);
-            System.debug(request.requestURI);
-            System.debug(urls);
+            System.debug('paramssss---'+request.params);
+            System.debug('test2222'+request.requestURI);
+            System.debug('test33'+urls);
                     
             //URL = /loyalty/programs/NTO/members/M1/wallet-links    
             String programName = EncodingUtil.urlDecode(urls[3], 'UTF-8');
             String membershipNumber = urls[5]; //'TEST123';
+            System.debug('memberShipNumber----'+membershipNumber);
+            membershipNumber = membershipNumber.trim();
+            
 
             //Retrieve member details
-            LoyaltyProgramMember[] members = [SELECT Id, MemberStatus, MembershipNumber, Contact.FirstName, Contact.LastName, Contact.Email, Contact.MobilePhone
+            LoyaltyProgramMember[] members = [SELECT Id, MemberStatus,Unique_ID__c, MembershipNumber, Contact.FirstName, Contact.LastName, Contact.Email, Contact.MobilePhone, Current_Status_Points__c, Total_Rewards__c
                                             FROM LoyaltyProgramMember
                                             WHERE MembershipNumber = :membershipNumber];
-
+			System.debug('memberTTTTTT111--' + members);
             LoyaltyProgramMember member = (members.size() > 0) ? members[0] : null;
-            //System.debug('member' + member);
+            System.debug('memberTTTTTT--' + member);
 
             //Check mandatory fields
             Boolean validRequest = true;
@@ -39,6 +42,8 @@ global with sharing class LoyaltyWalletLinksRestService {
                 errorMessages.add('Invalid loyalty program');
                 validRequest = false;
             }
+            System.debug('memberShipNumber222'+membershipNumber);
+            System.debug('member'+members);
             if (String.isBlank(membershipNumber) || member == null) {
                 errorMessages.add('Invalid membership number');
                 validRequest = false;
@@ -55,8 +60,8 @@ global with sharing class LoyaltyWalletLinksRestService {
             requestCanonical.membershipNumber = membershipNumber;
             requestCanonical.firstName = member.Contact.FirstName;
             requestCanonical.lastName = member.Contact.LastName;
-            requestCanonical.nextRewardPoints = 0;
-            requestCanonical.totalRewards = 0;
+            requestCanonical.nextRewardPoints = (Integer)member.Current_Status_Points__c;
+            requestCanonical.totalRewards = member.Total_Rewards__c;
 
             String requestPayload = JSON.serialize(requestCanonical);
             System.debug('requestPayload = ' + requestPayload);
