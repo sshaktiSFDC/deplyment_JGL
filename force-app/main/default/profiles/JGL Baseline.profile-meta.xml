@@ -1,32 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
-    <classAccesses>
-        <apexClass>LoyaltyWalletLinksRestService</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>MemberUpdateEventTriggerHandler</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ProcessRewardsAction</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ProcessRewardsEventTriggerHandler</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>SearchLoyaltyLedgerByContactController</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
+    <applicationVisibilities>
+        <application>standard__LoyaltyManagement</application>
+        <default>false</default>
+        <visible>true</visible>
+    </applicationVisibilities>
     <custom>true</custom>
     <description>Custom profile with common baseline access</description>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>LoyaltyProgramMember.CIM_Id__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>
