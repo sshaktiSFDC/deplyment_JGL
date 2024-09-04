@@ -1,17 +1,9 @@
-/**
-* @name         : CountVoucherReversalValueActionTest
-* @description  : This is test class for CountVoucherReversalValueAction
-* <Date>        <Modified By>     	<Brief Description of Change>
-* 2024-07-24   Nicholas Then        Created
-*/
 @isTest
-
-public class CountVoucherReversalValueActionTest {
-    
+public class CountTotalRewardsValueActionTest {
     static string testMemberId;
     
     @testSetup
-	static void setup() {
+    private static void setup(){
         //Create Loyalty Program
         LoyaltyProgram program = TestDataFactory.createLoyaltyProgram();
         insert program;
@@ -23,7 +15,6 @@ public class CountVoucherReversalValueActionTest {
         //Create Individual Program Members
         List<LoyaltyProgramMember> members = TestDataFactory.createIndividualMembers(program.Id, contacts[0].Id, 1);
         insert members;
-        
         testMemberId = members[0].Id;
         
         //Create journal Types
@@ -66,26 +57,25 @@ public class CountVoucherReversalValueActionTest {
         tj2.JournalSubTypeId = tjSubType.Id;
         tj2.Status = GlobalConstants.JOURNAL_STATUS_PROCESSED;
         journals.add(tj2);
-
         insert journals;
         
-
         //Create Vouchers
         List<Voucher> vouchers = new List<Voucher>();
                         Voucher voucher1 = new Voucher();
                         voucher1.LoyaltyProgramMemberId  = members[0].Id;
                         //voucher1.TransactionJournal.LoyaltyProgramId = program.Id;
-                        voucher1.Status = 'Redeemed';
+                        voucher1.Status = 'Issued';
                         voucher1.FaceValue = 10;
                         voucher1.UseDate = null;
                         voucher1.Order_Id_Redeem_Channel__c = 'POS';
                         voucher1.Order_Id_Redeem__c = 'TEST-ORDER-123';
         				voucher1.EffectiveDate = Date.today();
+        				voucher1.ExpirationDate = Date.today().addDays(2);
+        				voucher1.FaceValue = 200;
                         vouchers.add(voucher1);
      
-
         Voucher voucher2 = new Voucher();
-                        voucher2.Status = 'Redeemed';
+                        voucher2.Status = 'Issued';
                         voucher2.LoyaltyProgramMemberId  = members[0].Id;    
                         //voucher2.TransactionJournal.LoyaltyProgramId = program.Id;
                         voucher2.FaceValue = 10;
@@ -93,32 +83,22 @@ public class CountVoucherReversalValueActionTest {
                         voucher2.Order_Id_Redeem_Channel__c = 'POS';
                         voucher2.Order_Id_Redeem__c = 'TEST-ORDER-123';
         				voucher2.EffectiveDate = Date.today();
-                        vouchers.add(voucher2);
-        
-
-        insert vouchers;
-    
-	}
-    
-       @isTest
-	static void testCountVoucherReversalValueAction() {
-
-        // Call  method
-        Test.startTest();
-
-        List<CountVoucherReversalValueAction.CountVoucherValueReversedInput> inputs = new List<CountVoucherReversalValueAction.CountVoucherValueReversedInput>();
-        CountVoucherReversalValueAction.CountVoucherValueReversedInput input = new CountVoucherReversalValueAction.CountVoucherValueReversedInput();
-        input.originalOrderId = 'TEST-ORDER-123';
-        input.originalChannel = 'POS';
-        input.MemberId = testMemberId ;
-        inputs.add(input);
-
-        List<CountVoucherReversalValueAction.CountVoucherValueReversedOutput> outputs = CountVoucherReversalValueAction.CalcCountReversedVoucherValue(inputs);
-
-        Test.stopTest();
-
-        // Asserts
-        System.assertNotEquals(null, outputs, 'Outputs should not be null');
+        				voucher2.ExpirationDate = Date.today().addDays(2);
+                        voucher1.FaceValue = 200;
+        				vouchers.add(voucher2);
+        				insert vouchers;
     }
     
+    @isTest
+    private static void test_CalcCountTotalRewardsValue() {
+        List<LoyaltyProgramMember> member = [SELECT Id FROM LoyaltyProgramMember];
+        CountTotalRewardsValueAction.CountTotalRewardsValueInput input = new CountTotalRewardsValueAction.CountTotalRewardsValueInput();
+        input.MemberId = member[0].Id;
+        
+        Test.startTest();
+        List<CountTotalRewardsValueAction.CountTotalRewardsValueOutput> outputs = CountTotalRewardsValueAction.CalcCountTotalRewardsValue(new List<CountTotalRewardsValueAction.CountTotalRewardsValueInput> {input});
+        Test.stopTest();
+        
+        System.assertNotEquals(null, outputs, 'Outputs should not be null');
+    }
 }

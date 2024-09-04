@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Create_Bulk_Manual_Points_Adjustments</members>
-		<name>BatchCalcJobDefinition</name>
+		<members>ChangeStatusOfVoucherForReturnTest</members>
+		<members>ConvertStringToNumberTextTest</members>
+		<members>CountTotalRewardsValueActionTest</members>
+		<members>CountVoucherReversalValueActionTest</members>
+		<members>DebugLoyaltyProcessActionTest</members>
+		<members>DirectIssueVoucherEventActionTest</members>
+		<members>ExpireVouchersBatchTest</members>
+		<members>GenerateVoucherCodesActionTest</members>
+		<members>GetOriginalPointsForPurchaseActionTest</members>
+		<members>HandleReturnProcessTJActionTest</members>
+		<members>IssueBirthdayVoucherBatchTest</members>
+		<members>IssueRewardVouchersActionTest</members>
+		<members>IssueVoucherEventTriggerHandlerTest</members>
+		<members>LoyaltyMemberVoucherRestServiceTest</members>
+		<members>LoyaltyProgramMemberTriggerHandlerTest</members>
+		<members>LoyaltyRuntimeConfigurationActionTest</members>
+		<members>LoyaltyRuntimeHelperTest</members>
+		<members>LoyaltyWalletLinksRestServiceTest</members>
+		<members>MemberMigrationBatchTest</members>
+		<members>MemberUpdateEventTriggerHandlerTest</members>
+		<members>PointsExpirationBatchTest</members>
+		<members>ProcessRewardsActionTest</members>
+		<members>ProcessRewardsEventTriggerHandlerTest</members>
+		<members>RedeemVoucherTransactionTriggHandlerTest</members>
+		<members>ResetReturnTrackingEventActionTest</members>
+		<members>ReverseRedeemedVoucherEventActionTest</members>
+		<members>SLIbycloudorca__PermissionSetAssigneesControllerTest</members>
+		<members>SLIbycloudorca__UserLicenseAssigneesControllerTest</members>
+		<members>SearchLoyaltyLedgerContactControllerTest</members>
+		<members>TestDataFactory</members>
+		<members>TriggerHandlerTest</members>
+		<members>UpdateJournalEventActionTest</members>
+		<members>UpdateTotalRewardPointsTest</members>
+		<members>UpdateVoucherEventActionTest</members>
+		<members>UtilityHelperTest</members>
+		<members>VoucherTriggerHandlerTest</members>
+		<members>WalletServiceLogUtilityTest</members>
+		<name>ApexClass</name>
 	</types>
-	
 	<version>60.0</version>
 </Package>

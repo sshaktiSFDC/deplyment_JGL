@@ -34,7 +34,7 @@ private class LoyaltyMemberVoucherRestServiceTest {
             // Create LoyaltyProgramMember
             LoyaltyProgramMember loyaltyProgramMember = new LoyaltyProgramMember(
                 ProgramId = loyaltyProgram.Id,
-                membershipNumber = 'test123',
+                MembershipNumber = 'TEST123',
                 ContactId = contact.Id,
                 EnrollmentDate = Date.today(), // Set EnrollmentDate
                 MemberStatus = 'Active' // Set MemberStatus
@@ -117,7 +117,9 @@ private class LoyaltyMemberVoucherRestServiceTest {
         // Set the RestContext
         RestContext.request = req;
         RestContext.response = res;
+        //Test.setMock(HttpCalloutMock.class, new LoyaltyMemberVoucherRestService());
  		Test.startTest();
+        
         // Call the REST service method
         LoyaltyMemberVoucherRestService.doGet();
         
