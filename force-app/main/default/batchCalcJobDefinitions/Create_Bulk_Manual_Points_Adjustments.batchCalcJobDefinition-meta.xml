@@ -310,8 +310,8 @@
         <expressionFields>
             <alias>VoucherDefinitionNameChecked</alias>
             <dataType>Text</dataType>
-            <expression>IF( ISBLANK({VoucherDefinitionName}) == false &amp;&amp;
-CONTAINS({Category_c} , &quot;Ad-Hoc&quot;) , {VoucherDefinitionName} ,  &quot;NonAdHoc&quot; )</expression>
+            <expression>IF( CONTAINS({Category_c} , &quot;Ad-Hoc&quot;)  || LENGTH(SUBSTITUTE({VoucherDefinitionName} ,&quot; &quot;, &quot;&quot;)) == 0,
+ {VoucherDefinitionName} , IF( ISBLANK({Category_c}) == true, &quot;&quot;, &quot;NonAdHoc&quot;))</expression>
             <length>255</length>
         </expressionFields>
         <label>AddFields</label>
