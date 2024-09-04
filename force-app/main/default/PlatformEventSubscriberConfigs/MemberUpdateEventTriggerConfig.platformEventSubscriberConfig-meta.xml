@@ -3,5 +3,5 @@
     <batchSize>200</batchSize>
     <masterLabel>MemberUpdateEventTriggerConfig</masterLabel>
     <platformEventConsumer>MemberUpdateEventTrigger</platformEventConsumer>
-    <user>admin.user@justgroup.com.au.sandbox1</user>
+    <user>admin.user@justgroup.com.au.dev</user>
 </PlatformEventSubscriberConfig>
