@@ -27,8 +27,7 @@
 		<members>RedeemVoucherTransactionTriggHandlerTest</members>
 		<members>ResetReturnTrackingEventActionTest</members>
 		<members>ReverseRedeemedVoucherEventActionTest</members>
-		<members>SLIbycloudorca__PermissionSetAssigneesControllerTest</members>
-		<members>SLIbycloudorca__UserLicenseAssigneesControllerTest</members>
+		
 		<members>SearchLoyaltyLedgerContactControllerTest</members>
 		<members>TestDataFactory</members>
 		<members>TriggerHandlerTest</members>
